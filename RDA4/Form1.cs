@@ -157,7 +157,6 @@ namespace RDA4
                 ep.SetError(kmsbox, "Please enter valid positive number.");
                 flag = false;
             }
-
             else ep.SetError(kmsbox, "");
 
             int wprice = ParseInt(pricebox.Text);
@@ -330,27 +329,86 @@ namespace RDA4
         // place order from home
         private void PlaceOrder_Click(object sender, EventArgs e)
         {
-            
-            PanelHome.Visible = false;
-            PanelAddCustomer.Visible = false;
-            PanelAddVehicle.Visible = false;
-            PanelPlaceOrder.Visible = true;
+          PanelHome.Visible = false;
+          PanelAddCustomer.Visible = false;
+          PanelAddVehicle.Visible = false;
+          PanelPlaceOrder.Visible = true;
         }
 
-        // place order page
+        // place order click on place order page
         private void FinalOrder_Click(object sender, EventArgs e)
         {
             PanelHome.Visible = true;
-            PanelAddCustomer.Visible = true;
-            PanelAddVehicle.Visible = true;
+            PanelAddCustomer.Visible = false;
+            PanelAddVehicle.Visible = false;
+
+            bool tempflag = false;
+
+            string phone = phoneid.Text;
+            tempflag = ValidatePhone(phone);
+            Error(phoneid, null, tempflag, "Please enter a valid phone number (XXX-XXX-XXXX)", 0);
+
+
+
+            string vin = vid.Text;
+            tempflag = IsValid(vin, 11);
+
+
+            string dealer = dealerid.Text;
+
+            string date = orderdate.Value.ToString("yyyy-MM-dd");
+
+
+            int tradein = ParseInt(tradeinbox.Text);
+
+            string orderstatus = orderstatusbox.Text;
+
+
+           // MessageBox.Show("Order Placed!");
         }
 
-        // add customer from place order page
+        // add customer on place order page
         private void AddCustomerFromOrder_Click(object sender, EventArgs e)
         {
+
             PanelAddCustomer.Visible = true;
+            PanelAddVehicle.Visible = false;
+            PanelPlaceOrder.Visible = false;
+            PanelHome.Visible = false;
+
+
+
+            
+        }
+
+        static bool ValidatePhone(string phone)
+        {
+            bool flag = true;
+            if (phone.Length != 12)
+                flag = false;
+
+            if(flag)
+            {
+                for(int i = 0; i<phone.Length; i++)
+                {
+                    if(i == 3 || i == 7)
+                    {
+                        if (phone[i] != '-')
+                            flag = false;
+
+                        continue;
+                    }
+
+                    if(!(phone[i] >= '0') || !(phone[i] <= '9'))
+                    {
+                        flag = false;
+                    }
+                }
+            }
+
+
+            return flag;
         }
     }
-
    
 }
