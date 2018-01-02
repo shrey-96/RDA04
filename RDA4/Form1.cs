@@ -52,10 +52,14 @@ namespace RDA4
                 cn.Clone();
             }
 
-            PanelAddCustomer.Visible = false;
-            PanelAddVehicle.Visible = false;          
-            PanelPlaceOrder.Visible = false;
-            PanelHome.Visible = true;
+            // PanelAddCustomer.Visible = false;
+            // PanelAddVehicle.Visible = false;          
+            // PanelPlaceOrder.Visible = false;
+            // PanelHome.Visible = true;
+
+            PanelHome.BringToFront();
+
+            orderdate.MaxDate = DateTime.Now.Date;
 
         }
 
@@ -214,7 +218,8 @@ namespace RDA4
                 MessageBox.Show(query);
                 GetDB(query, "", true);
 
-                PanelHome.Visible = true;
+                //PanelHome.Visible = true;
+                PanelHome.BringToFront();
                 
             }
           
@@ -238,25 +243,14 @@ namespace RDA4
         // add vehicle from home
         private void AddVehicle_Click(object sender, EventArgs e)
         {
-           
-            //   PanelAddVehicle.Dock = DockStyle.Top;
-            PanelHome.Visible = false;
-            PanelAddVehicle.Visible = true;
-            //    PanelAddCustomer.Visible = false;
-            //    PanelPlaceOrder.Visible = false;
-
-
-
-
-
-
+            PanelAddVehicle.BringToFront();
         }
 
         // home button on add customer page
         private void VehicleHome_Click(object sender, EventArgs e)
         {
-            PanelHome.Visible = true;
-            
+            PanelHome.BringToFront(); 
+
            vinbox.Clear();
            makebox.Clear();
            modelbox.Clear();
@@ -269,10 +263,7 @@ namespace RDA4
         // add customer from home
         private void AddCustomer_Click(object sender, EventArgs e)
         {
-           
-            PanelAddVehicle.Visible = false;
-            PanelAddCustomer.Visible = true;
-            PanelHome.Visible = false;
+            PanelAddCustomer.BringToFront();
 
         }
 
@@ -319,8 +310,7 @@ namespace RDA4
 
             if (flag)
             {
-                PanelHome.Visible = true;
-                PanelAddCustomer.Visible = false;
+                PanelHome.BringToFront();
             }
 
 
@@ -329,56 +319,130 @@ namespace RDA4
         // place order from home
         private void PlaceOrder_Click(object sender, EventArgs e)
         {
-          PanelHome.Visible = false;
-          PanelAddCustomer.Visible = false;
-          PanelAddVehicle.Visible = false;
-          PanelPlaceOrder.Visible = true;
+            PanelPlaceOrder.BringToFront();
         }
 
         // place order click on place order page
         private void FinalOrder_Click(object sender, EventArgs e)
         {
-            PanelHome.Visible = true;
-            PanelAddCustomer.Visible = false;
-            PanelAddVehicle.Visible = false;
+            PanelHome.BringToFront();
 
+
+            bool flag = true;
             bool tempflag = false;
+            bool exist = false;
+            string query = "";
+            string check = "";
+
+
 
             string phone = phoneid.Text;
             tempflag = ValidatePhone(phone);
             Error(phoneid, null, tempflag, "Please enter a valid phone number (XXX-XXX-XXXX)", 0);
+            if (!tempflag) flag = false;
 
 
 
             string vin = vid.Text;
-            tempflag = IsValid(vin, 11);
+            tempflag = ValidateVIN(vin);
+            Error(vid, null, tempflag, "Please enter valid VIN (eg 12345678YEA -- 8 digits + 3 chars", 0);
+            if (!tempflag) flag = false;
 
-
+            int valid = 0;
             string dealer = dealerid.Text;
+            if (dealer == "")
+            {
+                valid = -1;
+                flag = false;
+            }
+            else valid = 0;
+            Error(null, dealerid, tempflag, "Required Field", valid);
+            
 
             string date = orderdate.Value.ToString("yyyy-MM-dd");
 
 
             int tradein = ParseInt(tradeinbox.Text);
+            if(tradein == -1) {
+                flag = false;
+                tempflag = false;
+            }
+            Error(tradeinbox, null, tempflag, "Please enter valid positive number.", 0);
 
+
+            valid = 0;
             string orderstatus = orderstatusbox.Text;
+            if(orderstatus == "")
+            {
+                valid = -1;
+                flag = false;
+            }
+            Error(null, orderstatusbox, false, "Required Field", valid);
 
 
-           // MessageBox.Show("Order Placed!");
+            bool instockflag = true;
+            bool vehicleflag = true;
+
+            if(flag)
+            {
+                query = "SELECT customerid FROM customer where phone='" + phone + "';";
+                check = GetDB(query, "customerid", false);
+                if (check != "")
+                {
+                    exist = true;
+                }
+
+                if (exist)
+                {
+                    query = "SELECT make from Vehicle where vin='" + vin + "';";
+                    check = GetDB(query, "make", false);
+                    if(check == "")
+                    {
+                        MessageBox.Show("Could not find the vehicle you're searching for.", "Error: Not Found");
+                    }
+                }
+                else
+                    MessageBox.Show("Could not find customer in database. Please click 'Add Customer' to add them.", "Error: Not Found");
+
+            }
+
+
+            // MessageBox.Show("Order Placed!");
         }
+
+        // validate VIN (vehicle identification number)
+        static bool ValidateVIN(string vin)
+        {
+            bool flag = true;
+
+            if (vin.Length != 11)
+                flag = false;
+
+            if(flag)
+            {
+                for(int i = 0; i<vin.Length; i++)
+                {
+                    if(i<8)
+                    {
+                        if (!(vin[i] >= '0') || !(vin[i] <= '9'))
+                            flag = false;
+                    }
+                    else
+                    {
+                        if (!char.IsLetter(vin[i]))
+                            flag = false;
+                    }
+                }
+            }
+
+            return flag;
+        }
+
 
         // add customer on place order page
         private void AddCustomerFromOrder_Click(object sender, EventArgs e)
         {
-
-            PanelAddCustomer.Visible = true;
-            PanelAddVehicle.Visible = false;
-            PanelPlaceOrder.Visible = false;
-            PanelHome.Visible = false;
-
-
-
-            
+            PanelHome.BringToFront();       
         }
 
         static bool ValidatePhone(string phone)
@@ -408,6 +472,16 @@ namespace RDA4
 
 
             return flag;
+        }
+
+        private void HomeOnAddCustomer_Click(object sender, EventArgs e)
+        {
+            PanelHome.BringToFront();
+        }
+
+        private void HomeOnPlaceOrder_Click(object sender, EventArgs e)
+        {
+            PanelHome.BringToFront();
         }
     }
    
