@@ -310,7 +310,7 @@ namespace RDA4
 
             if (flag)
             {
-                PanelHome.BringToFront();
+                PanelAddCustomer.SendToBack();
             }
 
 
@@ -442,7 +442,7 @@ namespace RDA4
         // add customer on place order page
         private void AddCustomerFromOrder_Click(object sender, EventArgs e)
         {
-            PanelHome.BringToFront();       
+            PanelAddCustomer.BringToFront();      
         }
 
         static bool ValidatePhone(string phone)
@@ -474,12 +474,7 @@ namespace RDA4
             return flag;
         }
 
-        private void HomeOnAddCustomer_Click(object sender, EventArgs e)
-        {
-            PanelHome.BringToFront();
-        }
-
-        private void HomeOnPlaceOrder_Click(object sender, EventArgs e)
+        private void HomeButton(object sender, EventArgs e)
         {
             PanelHome.BringToFront();
         }

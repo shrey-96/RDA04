@@ -261,7 +261,7 @@
             this.VehicleHome.TabIndex = 25;
             this.VehicleHome.Text = "Home";
             this.VehicleHome.UseVisualStyleBackColor = false;
-            this.VehicleHome.Click += new System.EventHandler(this.VehicleHome_Click);
+            this.VehicleHome.Click += new System.EventHandler(this.HomeButton);
             // 
             // branchbox
             // 
@@ -803,7 +803,7 @@
             this.HomeOnAddCustomer.TabIndex = 26;
             this.HomeOnAddCustomer.Text = "Home";
             this.HomeOnAddCustomer.UseVisualStyleBackColor = false;
-            this.HomeOnAddCustomer.Click += new System.EventHandler(this.HomeOnAddCustomer_Click);
+            this.HomeOnAddCustomer.Click += new System.EventHandler(this.HomeButton);
             // 
             // HomeOnPlaceOrder
             // 
@@ -818,7 +818,7 @@
             this.HomeOnPlaceOrder.TabIndex = 27;
             this.HomeOnPlaceOrder.Text = "Home";
             this.HomeOnPlaceOrder.UseVisualStyleBackColor = false;
-            this.HomeOnPlaceOrder.Click += new System.EventHandler(this.HomeOnPlaceOrder_Click);
+            this.HomeOnPlaceOrder.Click += new System.EventHandler(this.HomeButton);
             // 
             // Form1
             // 
