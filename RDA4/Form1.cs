@@ -1,6 +1,6 @@
 ﻿/*
 * File:         Form1.cs
-* Project:      RDA4 - STWallu
+* Project:      RDA4 - STWally
 * By:           Shreyansh Tiwari
 * Date:         Janurary 3rd, 2017
 * Description:  This file consists of main logic of the progrm. The logic include
@@ -649,7 +649,7 @@ namespace RDA4
         /* 
         *  Name:           ValidateVIN()
         *  Parameters:     string vin - VIN of vehicle
-        *  Return value:   null
+        *  Return value:   bool
         *  Description:    This method validated the VIN value entered.
         */
         static bool ValidateVIN(string vin)
@@ -694,13 +694,21 @@ namespace RDA4
         }
 
 
-        // validate phone number
+        /* 
+        *  Name:           ValidatePhone()
+        *  Parameters:     object, EventArgs
+        *  Return value:   bool
+        *  Description:    This method is invoked to validate phone number.
+        */
         static bool ValidatePhone(string phone)
         {
             bool flag = true;
+
+            // check length
             if (phone.Length != 12)
                 flag = false;
 
+            // check for characters
             if (flag)
             {
                 for (int i = 0; i < phone.Length; i++)
@@ -724,13 +732,24 @@ namespace RDA4
             return flag;
         }
 
-
+        /* 
+        *  Name:           HomeButton()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    Brings home page infront. Clear all textboxes.
+        */
         private void HomeButton(object sender, EventArgs e)
         {
             PanelHome.BringToFront();
             ClearAllTextBoxes();
         }
 
+        /* 
+        *  Name:           ClearAllTextBoxes()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method clears all the textboxes of all the pages.
+        */
         private void ClearAllTextBoxes()
         {
             // clear all textboxes of add vehicle page
@@ -764,8 +783,16 @@ namespace RDA4
 
         }
 
+        /* 
+        *  Name:          OrderHistory_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method gets the orders from database and display
+        *                  in the textbox.
+        */
         private void OrderHistory_Click(object sender, EventArgs e)
         {
+            // bring orderhistory panel in front
             PanelOrderHistory.BringToFront();
 
             string query = "";
@@ -786,8 +813,9 @@ namespace RDA4
             {
                 count++;
 
+                // query to get the data from database
                 query = "SELECT CONCAT(firstname, ' ', lastname, ' - ',  orderdate, ' - ', orderstatus, ' - ', " +
-                    "make, ' ', model) as Details " +
+                    "make, ' ', model, ' -$', sprice) as Details " +
                     "FROM orderline " +
                     "INNER JOIN customer on orderline.customerid=customer.customerid " +
                     "INNER JOIN orders on orderline.orderid=orders.orderid " +
@@ -801,11 +829,24 @@ namespace RDA4
             }
         }
 
+        /* 
+        *  Name:           OrderHistory_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method gets the orders from database and display
+        *                  in the textbox.
+        */
         private void ModifyOrder_Click(object sender, EventArgs e)
         {
             PanelModifyOrder.BringToFront();
         }
 
+        /* 
+        *  Name:           SearchCustomer_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This search orderdetails. Get details if found or show error.
+        */
         private void SearchCustomer_Click(object sender, EventArgs e)
         {
             bool validformat = true;
@@ -857,6 +898,12 @@ namespace RDA4
 
         }
 
+        /* 
+        *  Name:           ChangeStatus_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method gets the value from textbox and changes the status.
+        */
         private void ChangeStatus_Click(object sender, EventArgs e)
         {
             bool Changeable = false;
@@ -866,6 +913,7 @@ namespace RDA4
             string temp = RetrievedDetails.Text;
             temp = temp.Substring(0, 5);
 
+            // status is not already paid
             if (temp.ToLower() != " paid")
             {
                 ep.SetError(RetrievedDetails, "");
@@ -875,7 +923,7 @@ namespace RDA4
             else
                 ep.SetError(RetrievedDetails, "Status is already PAID. Can't be altered now!");
 
-
+            // change status
             if (Changeable)
             {
                 string status = ModifyStatus.Text;
@@ -895,6 +943,7 @@ namespace RDA4
             string query = "";
             string check = "";
 
+            // cancel it
             if(cancel)
             {
                 temp = Orderidbox.Text;
@@ -945,6 +994,12 @@ namespace RDA4
             }
         }
 
+        /* 
+        *  Name:           ExitWally_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method exits the closes the connection and exits program.
+        */
         private void ExitWally_Click(object sender, EventArgs e)
         {
             DialogResult Confirmation = MessageBox.Show("Are you sure you want to exit?", "Confirm", MessageBoxButtons.YesNo);
@@ -955,13 +1010,19 @@ namespace RDA4
             }
         }
 
+        /* 
+        *  Name:           SearchInventory_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method searches the inventory levlel of a specific dealer.
+        */
         private void SearchInventory_Click(object sender, EventArgs e)
         {
             string temp = DealershipSelect.Text;
             int selected = 0;
             int branchid = 0;
             string query = "";
-            string check = "";
+            //string check = "";
             
             if(temp == "")
             {
@@ -970,6 +1031,7 @@ namespace RDA4
 
             Error(null, DealershipSelect, false, "Required field", selected);
 
+            // if dealer selected
             if (selected != -1)
             {
                 branchid = BranchId(temp);
@@ -1009,14 +1071,14 @@ namespace RDA4
                     MessageBox.Show("Error: " + ex);
                 }
             }
-
-
-
-
-
-
         }
 
+        /* 
+        *  Name:           InventoryLevel_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method brings the inventory level page infront.
+        */
         private void InventoryLevel_Click(object sender, EventArgs e)
         {
             PanelInventory.BringToFront();
