@@ -17,7 +17,7 @@ namespace RDA4
 
         MySqlConnection cn;
 
-        static MySqlCommand cmd; 
+        static MySqlCommand cmd;
 
         public Form1()
         {
@@ -30,7 +30,7 @@ namespace RDA4
 
                 cmd = new MySqlCommand();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show("Error: " + e);
             }
@@ -46,7 +46,7 @@ namespace RDA4
                 cn.Open();
                 cmd.Connection = cn;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex);
                 cn.Close();
@@ -101,7 +101,7 @@ namespace RDA4
         {
             try
             {
-                if(combo == null)
+                if (combo == null)
                 {
                     if (!valid)
                         ep.SetError(box, msg);
@@ -116,7 +116,7 @@ namespace RDA4
                         ep.SetError(combo, "");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex);
             }
@@ -163,7 +163,7 @@ namespace RDA4
             else ep.SetError(kmsbox, "");
 
             int wprice = ParseInt(pricebox.Text);
-            if (wprice < 0) 
+            if (wprice < 0)
             {
                 ep.SetError(pricebox, "Please enter valid positive number.");
                 flag = false;
@@ -187,9 +187,9 @@ namespace RDA4
             }
             else
                 ep.SetError(branchbox, "");
-               
 
-            if(vyear == -1 || kms == -1 || wprice == -1)
+
+            if (vyear == -1 || kms == -1 || wprice == -1)
             {
                 flag = false;
             }
@@ -201,8 +201,8 @@ namespace RDA4
                 branchid = BranchId(branch);
             }
 
-           // MessageBox.Show(branchid.ToString());
-            
+            // MessageBox.Show(branchid.ToString());
+
 
 
             if (flag)
@@ -217,10 +217,10 @@ namespace RDA4
 
                 //PanelHome.Visible = true;
                 PanelHome.BringToFront();
-                
+
             }
-          
-            
+
+
         }
 
         // Return the branch id for selected branch
@@ -243,9 +243,9 @@ namespace RDA4
             if (box.Length == 0)
                 flag = false;
 
-            if(length == 11 && box.Length != 11)           
+            if (length == 11 && box.Length != 11)
                 flag = false;
-            
+
             return flag;
         }
 
@@ -358,14 +358,14 @@ namespace RDA4
                 branchid = BranchId(dealer);
             }
             Error(null, dealerid, tempflag, "Required Field", valid);
-            
+
             // get date
             string date = orderdate.Value.ToString("yyyy-MM-dd");
 
             // get tradein
             tempflag = true;
             int tradein = ParseInt(tradeinbox.Text);
-            if(tradein < -1) {
+            if (tradein < -1) {
                 flag = false;
                 tempflag = false;
             }
@@ -374,7 +374,7 @@ namespace RDA4
 
             valid = 0;
             string orderstatus = orderstatusbox.Text;
-            if(orderstatus == "")
+            if (orderstatus == "")
             {
                 valid = -1;
                 flag = false;
@@ -383,7 +383,7 @@ namespace RDA4
 
 
 
-            if(flag)
+            if (flag)
             {
                 query = "SELECT customerid FROM customer where phone='" + phone + "';";
                 check = GetDB(query, "customerid", false);
@@ -396,13 +396,13 @@ namespace RDA4
                 {
                     query = "SELECT make from Vehicle where vin='" + vin + "';";
                     check = GetDB(query, "make", false);
-                    if(check == "")
+                    if (check == "")
                     {
                         MessageBox.Show("Could not find the vehicle you're searching for.", "Error: Not Found");
                     }
                     else
                     {
-                        query = "SELECT make FROM vehicle where dealerid=" + branchid.ToString() + 
+                        query = "SELECT make FROM vehicle where dealerid=" + branchid.ToString() +
                             " AND vin='" + vin + "';";
                         check = GetDB(query, "make", false);
                         //MessageBox.Show("-----" + check + "-------");
@@ -412,18 +412,17 @@ namespace RDA4
                         {
                             query = "SELECT instock FROM vehicle where vin='" + vin + "';";
                             check = GetDB(query, "instock", false);
-                            if(check.ToLower() == " no")
+                            if (check.ToLower() == " no")
                             {
                                 MessageBox.Show("Vehicle is currenlty not in stock.");
                             }
                             else
-                                if(check.ToLower() == " hold")
+                                if (check.ToLower() == " hold")
                             {
                                 MessageBox.Show("Vehicles is currently on hold by a customer.");
                             }
                             else
                             {
-                                MessageBox.Show("Vehicle is available... Hurray!!!");
                                 done = true;
                             }
 
@@ -433,7 +432,7 @@ namespace RDA4
                 else
                     MessageBox.Show("Could not find customer in database. Please click 'Add Customer' to add them.", "Error: Not Found");
 
-                if(done)
+                if (done)
                 {
                     string status = "";
 
@@ -444,67 +443,87 @@ namespace RDA4
                     }
                     else
                     {
-                        status = "'No'";
+                        status = "'PAID'";
                     }
+
+                    // get the price of the car and calculate sale price
+                    query = "SELECT wprice FROM vehicle where vin='" + vin + "';";
+                    check = GetDB(query, "wprice", false);
+                    double sprice;
+                    double.TryParse(check, out sprice);
+                    double diff = sprice - tradein;
+                    sprice = diff + (diff * 0.13);
+                    DialogResult Confirmation = MessageBox.Show("Are you sure to proceed?", "Confirm Purchase", MessageBoxButtons.YesNo);
 
                     // Update instock flag
-                    query = "UPDATE Vehicle " +
-                        "SET instock=" + status + " where vin='" + vin + "';";
-
-                    GetDB(query, "", true);
-
-                    // get the latest orderid
-                    query = "SELECT max(orderid) AS maximum from orders;";
-                    check = GetDB(query, "maximum", false);
-                    int orderid = ParseInt(check);
-                    if(orderid <= 5000)
+                    if (Confirmation == DialogResult.Yes)
                     {
-                        orderid = 5000;
+                        string stock = "";
+                        if (status.Contains("Paid"))
+                            stock = "'No'";
+                        else
+                            stock = status;
+                        query = "UPDATE Vehicle " +
+                            "SET instock=" + stock + " where vin='" + vin + "';";
+
+                        GetDB(query, "", true);
+
+                        // get the latest orderid
+                        query = "SELECT max(orderid) AS maximum from orders;";
+                        check = GetDB(query, "maximum", false);
+                        int orderid = ParseInt(check);
+                        if (orderid <= 5000)
+                        {
+                            orderid = 5000;
+                        }
+                        orderid++;
+
+                        // insert order into Ordertable
+                        query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
+                            "VALUES " +
+                            "(" + orderid.ToString() + ", '" + date + "', " + status + ");";
+                        GetDB(query, "", true);
+
+                        // get customer id for phonenumber from database
+                        query = "SELECT customerid FROM customer where phone='" + phone + "';";
+                        check = GetDB(query, "customerid", false);
+                        int customerid = ParseInt(check);
+
+
+                        // get latest orderlineid
+                        int orderlineid = 0;
+                        query = "SELECT max(orderlineid) AS maximum FROM orderline;";
+                        check = GetDB(query, "maximum", false);
+                        orderlineid = ParseInt(check);
+                        if (orderlineid <= 200)
+                        {
+                            orderlineid = 200;
+                        }
+                        orderlineid++;
+
+
+
+
+                        // insert into orderline
+                        query = "INSERT INTO OrderLine (OrderLineID, OrderID, CustomerID, DealerID, VIN, TradeIn, sprice) " +
+                            "VALUES " +
+                            "(" + orderlineid.ToString() + ", " + orderid.ToString() + ", " + customerid.ToString() + ", "
+                            + branchid.ToString() + ", '" + vin + "', " + tradein.ToString() + ", " + sprice.ToString() + ")";
+
+                        // execute orderline query
+                        GetDB(query, "", true);
+
+
+                        if (tradein != 0)
+                        {
+                            MessageBox.Show("Please enter the details of tradein car.");
+                            pricebox.Text = tradein.ToString();
+                            PanelAddVehicle.BringToFront();
+                        }
+
+                        PanelPlaceOrder.SendToBack();
                     }
-                    orderid++;
 
-                    // insert order into Ordertable
-                    query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
-                        "VALUES " +
-                        "(" + orderid.ToString() + ", '" + date + "', " + status + ");";
-                    GetDB(query, "", true);
-
-                    // get customer id for phonenumber from database
-                    query = "SELECT customerid FROM customer where phone='" + phone + "';";
-                    check = GetDB(query, "customerid", false);
-                    int customerid = ParseInt(check);
-                    if(customerid <= 100)
-                    {
-                        customerid = 100;
-                    }
-                    customerid++;
-
-                    // get latest orderlineid
-                    int orderlineid = 0;
-                    query = "SELECT max(orderlineid) AS maximum FROM orderline;";
-                    check = GetDB(query, "maximum", false);
-                    orderlineid = ParseInt(check);
-                    if(orderlineid <= 200)
-                    {
-                        orderlineid = 200;
-                    }
-                    orderlineid++;
-
-
-                    // insert into orderline
-                    query = "INSERT INTO OrderLine (OrderLineID, OrderID, CustomerID, DealerID, VIN, TradeIn) " +
-                        "VALUES " +
-                        "(" + orderlineid.ToString() + ", " + orderid.ToString() + ", " + customerid.ToString() + ", "
-                        + branchid.ToString() + ", '" + vin + "', " + tradein.ToString() + ")";
-
-                    GetDB(query, "", true);
-
-                    if (tradein != 0)
-                    {
-                        MessageBox.Show("Please enter the details of tradein car.");
-                        pricebox.Text = tradein.ToString();
-                        PanelAddVehicle.BringToFront();
-                    }
                 }
             }
 
@@ -518,11 +537,11 @@ namespace RDA4
             if (vin.Length != 11)
                 flag = false;
 
-            if(flag)
+            if (flag)
             {
-                for(int i = 0; i<vin.Length; i++)
+                for (int i = 0; i < vin.Length; i++)
                 {
-                    if(i<8)
+                    if (i < 8)
                     {
                         if (!(vin[i] >= '0') || !(vin[i] <= '9'))
                             flag = false;
@@ -542,7 +561,7 @@ namespace RDA4
         // add customer on place order page
         private void AddCustomerFromOrder_Click(object sender, EventArgs e)
         {
-            PanelAddCustomer.BringToFront();      
+            PanelAddCustomer.BringToFront();
         }
 
 
@@ -553,11 +572,11 @@ namespace RDA4
             if (phone.Length != 12)
                 flag = false;
 
-            if(flag)
+            if (flag)
             {
-                for(int i = 0; i<phone.Length; i++)
+                for (int i = 0; i < phone.Length; i++)
                 {
-                    if(i == 3 || i == 7)
+                    if (i == 3 || i == 7)
                     {
                         if (phone[i] != '-')
                             flag = false;
@@ -565,7 +584,7 @@ namespace RDA4
                         continue;
                     }
 
-                    if(!(phone[i] >= '0') || !(phone[i] <= '9'))
+                    if (!(phone[i] >= '0') || !(phone[i] <= '9'))
                     {
                         flag = false;
                     }
@@ -598,14 +617,178 @@ namespace RDA4
             firstnamebox.Clear();
             lastnamebox.Clear();
             phonebox.Clear();
+            
 
             // clear all textboxes of place order
             phoneid.Clear();
             vid.Clear();
             tradeinbox.Text = "0";
 
+            OrderDetails.Clear();
+
         }
 
-    }
+        private void OrderHistory_Click(object sender, EventArgs e)
+        {
+            PanelOrderHistory.BringToFront();
+
+            string query = "";
+            string check = "";
+            int count = 0;
+
+            int min = 0;
+            int max = 0;
+            query = "SELECT max(orderid) as maximum from orders;";
+            check = GetDB(query, "maximum", false);
+            max = ParseInt(check);
+
+            query = "Select min(orderid) as minimum from orders;";
+            check = GetDB(query, "minimum", false);
+            min = ParseInt(check);
+
+            for (int i = min; i <= max; i++)
+            {
+                count++;
+
+                query = "SELECT CONCAT(firstname, ' ', lastname, ' - ',  orderdate, ' - ', orderstatus, ' - ', " +
+                    "make, ' ', model) as Details " +
+                    "FROM orderline " +
+                    "INNER JOIN customer on orderline.customerid=customer.customerid " +
+                    "INNER JOIN orders on orderline.orderid=orders.orderid " +
+                    "INNER JOIN vehicle on orderline.vin=vehicle.vin "
+                    + "where orders.orderid=" + i + ";";
+
+                check = GetDB(query, "Details", false);
+
+                OrderDetails.Text = OrderDetails.Text + count + ". " + check + "\n";
+
+            }
+        }
+
+        private void ModifyOrder_Click(object sender, EventArgs e)
+        {
+            PanelModifyOrder.BringToFront();
+        }
+
+        private void SearchCustomer_Click(object sender, EventArgs e)
+        {
+            bool validformat = true;
+            string temp = Orderidbox.Text;
+            string query = "";
+            string check = "";
+            bool exist = true;
+
+            int orderid = ParseInt(temp);
+
+            
+
+            if (orderid < 1000 || orderid > 9999)
+                validformat = false;
+
+            Error(Orderidbox, null, validformat, "Please enter valid 4 digit id.", 0);
+
+            if (validformat)
+            {
+                query = "SELECT orderdate from orders where orderid=" + orderid + ";";
+                check = GetDB(query, "orderdate", false);
+
+                if (check != "")
+                {
+
+                    query = "SELECT CONCAT(orderstatus, ' -- ', firstname, ' ', lastname, ' - ',  orderdate, ' - ', " +
+                    "make, ' ', model) as Details " +
+                    "FROM orderline " +
+                    "INNER JOIN customer on orderline.customerid=customer.customerid " +
+                    "INNER JOIN orders on orderline.orderid=orders.orderid " +
+                    "INNER JOIN vehicle on orderline.vin=vehicle.vin "
+                    + "where orders.orderid=" + orderid + ";";
+
+                    check = GetDB(query, "Details", false);
+
+                    RetrievedDetails.Text = check;
+
+
+                   
+                }
+                else
+                {
+                    exist = false;
+                }
+                Error(Orderidbox, null, exist, "The Order id does not exist in database", 0);
+            }
+
+
+
+        }
+
+        private void ChangeStatus_Click(object sender, EventArgs e)
+        {
+            bool Changeable = false;
+            bool cancel = false;
+            bool paid = false;
+
+            string temp = RetrievedDetails.Text;
+            temp = temp.Substring(0, 5);
+
+            if (temp.ToLower() != " paid")
+            {
+                ep.SetError(RetrievedDetails, "");
+                Changeable = true;
+
+            }
+            else
+                ep.SetError(RetrievedDetails, "Status is already PAID. Can't be altered now!");
+
+
+            if (Changeable)
+            {
+                string status = ModifyStatus.Text;
+                if (status.ToLower() == "cncl")
+                {
+                    cancel = true;
+
+                }
+                else
+                    if (status.ToLower() == "paid")
+                    {
+                        paid = true;
+                    }
+
+            }
+
+            string query = "";
+            string check = "";
+
+            if(cancel)
+            {
+                temp = Orderidbox.Text;
+                int orderid = ParseInt(temp);
+
+                query = "SELECT instock FROM orderline " +
+                    "INNER JOIN orders on orders.orderid=orderline.orderid " +
+                    "INNER JOIN vehicle on vehicle.vin=orderline.vin " +
+                    "where orders.orderid=" + orderid + ";";
+
+                check = GetDB(query, "instock", false);
+                if(check.ToLower().Contains("yes"))
+                {
+                    MessageBox.Show("The order is already cancelled.");
+                }
+                else
+                {
+                    query = "SELECT vin from orderline " +
+                        "INNER JOIN orders on orderline.orderid=orders.orderid " +
+                        "INNER JOIN orderline.vin=vehicle.vin " +
+                        "where orders.orderid=" + orderid + ";";
+
+                    check = GetDB(query, "vin", false);
+
+                    
+                }
+                
+            }
+        }
+    } 
+    
    
 }

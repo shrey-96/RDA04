@@ -88,6 +88,20 @@
             this.ep = new System.Windows.Forms.ErrorProvider(this.components);
             this.HomeOnAddCustomer = new System.Windows.Forms.Button();
             this.HomeOnPlaceOrder = new System.Windows.Forms.Button();
+            this.PanelOrderHistory = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.OrderDetails = new System.Windows.Forms.RichTextBox();
+            this.PanelModifyOrder = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.Orderidbox = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.ChangeStatus = new System.Windows.Forms.Button();
+            this.RetrievedDetails = new System.Windows.Forms.RichTextBox();
+            this.SearchCustomer = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.ModifyStatus = new System.Windows.Forms.ComboBox();
             this.PanelHome.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.PanelAddVehicle.SuspendLayout();
@@ -97,6 +111,10 @@
             this.PanelAddCustomer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ep)).BeginInit();
+            this.PanelOrderHistory.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            this.PanelModifyOrder.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelHome
@@ -144,6 +162,7 @@
             this.OrderHistory.TabIndex = 5;
             this.OrderHistory.Text = "Order History";
             this.OrderHistory.UseVisualStyleBackColor = false;
+            this.OrderHistory.Click += new System.EventHandler(this.OrderHistory_Click);
             // 
             // ModifyOrder
             // 
@@ -158,6 +177,7 @@
             this.ModifyOrder.TabIndex = 4;
             this.ModifyOrder.Text = "Modify Order";
             this.ModifyOrder.UseVisualStyleBackColor = false;
+            this.ModifyOrder.Click += new System.EventHandler(this.ModifyOrder_Click);
             // 
             // PlaceOrder
             // 
@@ -826,15 +846,193 @@
             this.HomeOnPlaceOrder.UseVisualStyleBackColor = false;
             this.HomeOnPlaceOrder.Click += new System.EventHandler(this.HomeButton);
             // 
+            // PanelOrderHistory
+            // 
+            this.PanelOrderHistory.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelOrderHistory.BackgroundImage")));
+            this.PanelOrderHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PanelOrderHistory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelOrderHistory.Controls.Add(this.OrderDetails);
+            this.PanelOrderHistory.Controls.Add(this.button1);
+            this.PanelOrderHistory.Controls.Add(this.pictureBox5);
+            this.PanelOrderHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelOrderHistory.Location = new System.Drawing.Point(0, 0);
+            this.PanelOrderHistory.Name = "PanelOrderHistory";
+            this.PanelOrderHistory.Size = new System.Drawing.Size(1063, 647);
+            this.PanelOrderHistory.TabIndex = 27;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.button1.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(12, 514);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(156, 66);
+            this.button1.TabIndex = 26;
+            this.button1.Text = "Home";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.HomeButton);
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
+            this.pictureBox5.Location = new System.Drawing.Point(124, 3);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(734, 107);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox5.TabIndex = 2;
+            this.pictureBox5.TabStop = false;
+            // 
+            // OrderDetails
+            // 
+            this.OrderDetails.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OrderDetails.Location = new System.Drawing.Point(241, 163);
+            this.OrderDetails.Name = "OrderDetails";
+            this.OrderDetails.Size = new System.Drawing.Size(498, 407);
+            this.OrderDetails.TabIndex = 27;
+            this.OrderDetails.Text = "";
+            // 
+            // PanelModifyOrder
+            // 
+            this.PanelModifyOrder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelModifyOrder.BackgroundImage")));
+            this.PanelModifyOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PanelModifyOrder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelModifyOrder.Controls.Add(this.ModifyStatus);
+            this.PanelModifyOrder.Controls.Add(this.label19);
+            this.PanelModifyOrder.Controls.Add(this.SearchCustomer);
+            this.PanelModifyOrder.Controls.Add(this.RetrievedDetails);
+            this.PanelModifyOrder.Controls.Add(this.button2);
+            this.PanelModifyOrder.Controls.Add(this.Orderidbox);
+            this.PanelModifyOrder.Controls.Add(this.label21);
+            this.PanelModifyOrder.Controls.Add(this.pictureBox6);
+            this.PanelModifyOrder.Controls.Add(this.ChangeStatus);
+            this.PanelModifyOrder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelModifyOrder.Location = new System.Drawing.Point(0, 0);
+            this.PanelModifyOrder.Name = "PanelModifyOrder";
+            this.PanelModifyOrder.Size = new System.Drawing.Size(1063, 647);
+            this.PanelModifyOrder.TabIndex = 27;
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.button2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.button2.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(12, 514);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(156, 66);
+            this.button2.TabIndex = 26;
+            this.button2.Text = "Home";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.HomeButton);
+            // 
+            // Orderidbox
+            // 
+            this.Orderidbox.Location = new System.Drawing.Point(370, 163);
+            this.Orderidbox.Name = "Orderidbox";
+            this.Orderidbox.Size = new System.Drawing.Size(260, 22);
+            this.Orderidbox.TabIndex = 4;
+            // 
+            // label21
+            // 
+            this.label21.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label21.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label21.Location = new System.Drawing.Point(253, 160);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(108, 23);
+            this.label21.TabIndex = 3;
+            this.label21.Text = "Order ID :";
+            // 
+            // pictureBox6
+            // 
+            this.pictureBox6.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
+            this.pictureBox6.Location = new System.Drawing.Point(124, 3);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(734, 107);
+            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox6.TabIndex = 2;
+            this.pictureBox6.TabStop = false;
+            // 
+            // ChangeStatus
+            // 
+            this.ChangeStatus.BackColor = System.Drawing.SystemColors.MenuText;
+            this.ChangeStatus.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ChangeStatus.BackgroundImage")));
+            this.ChangeStatus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ChangeStatus.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.ChangeStatus.Font = new System.Drawing.Font("Arial Narrow", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ChangeStatus.Location = new System.Drawing.Point(407, 508);
+            this.ChangeStatus.Name = "ChangeStatus";
+            this.ChangeStatus.Size = new System.Drawing.Size(159, 44);
+            this.ChangeStatus.TabIndex = 1;
+            this.ChangeStatus.Text = "Change";
+            this.ChangeStatus.UseVisualStyleBackColor = false;
+            this.ChangeStatus.Click += new System.EventHandler(this.ChangeStatus_Click);
+            // 
+            // RetrievedDetails
+            // 
+            this.RetrievedDetails.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RetrievedDetails.Location = new System.Drawing.Point(274, 271);
+            this.RetrievedDetails.Name = "RetrievedDetails";
+            this.RetrievedDetails.ReadOnly = true;
+            this.RetrievedDetails.Size = new System.Drawing.Size(451, 79);
+            this.RetrievedDetails.TabIndex = 27;
+            this.RetrievedDetails.Text = "";
+            // 
+            // SearchCustomer
+            // 
+            this.SearchCustomer.BackColor = System.Drawing.SystemColors.MenuText;
+            this.SearchCustomer.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("SearchCustomer.BackgroundImage")));
+            this.SearchCustomer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SearchCustomer.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.SearchCustomer.Font = new System.Drawing.Font("Arial Narrow", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SearchCustomer.Location = new System.Drawing.Point(434, 204);
+            this.SearchCustomer.Name = "SearchCustomer";
+            this.SearchCustomer.Size = new System.Drawing.Size(120, 44);
+            this.SearchCustomer.TabIndex = 28;
+            this.SearchCustomer.Text = " Search";
+            this.SearchCustomer.UseVisualStyleBackColor = false;
+            this.SearchCustomer.Click += new System.EventHandler(this.SearchCustomer_Click);
+            // 
+            // label19
+            // 
+            this.label19.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label19.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label19.Location = new System.Drawing.Point(217, 427);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(147, 23);
+            this.label19.TabIndex = 29;
+            this.label19.Text = "Order Status :";
+            // 
+            // ModifyStatus
+            // 
+            this.ModifyStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ModifyStatus.FormattingEnabled = true;
+            this.ModifyStatus.Items.AddRange(new object[] {
+            "CNCL",
+            "PAID"});
+            this.ModifyStatus.Location = new System.Drawing.Point(370, 428);
+            this.ModifyStatus.Name = "ModifyStatus";
+            this.ModifyStatus.Size = new System.Drawing.Size(260, 24);
+            this.ModifyStatus.TabIndex = 30;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 647);
-            this.Controls.Add(this.PanelAddVehicle);
+            this.Controls.Add(this.PanelModifyOrder);
             this.Controls.Add(this.PanelAddCustomer);
             this.Controls.Add(this.PanelPlaceOrder);
             this.Controls.Add(this.PanelHome);
+            this.Controls.Add(this.PanelAddVehicle);
+            this.Controls.Add(this.PanelOrderHistory);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -850,6 +1048,11 @@
             this.PanelAddCustomer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ep)).EndInit();
+            this.PanelOrderHistory.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            this.PanelModifyOrder.ResumeLayout(false);
+            this.PanelModifyOrder.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -914,6 +1117,20 @@
         private System.Windows.Forms.ComboBox dealerid;
         private System.Windows.Forms.Button HomeOnAddCustomer;
         private System.Windows.Forms.Button HomeOnPlaceOrder;
+        private System.Windows.Forms.Panel PanelOrderHistory;
+        private System.Windows.Forms.RichTextBox OrderDetails;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.Panel PanelModifyOrder;
+        private System.Windows.Forms.ComboBox ModifyStatus;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Button SearchCustomer;
+        private System.Windows.Forms.RichTextBox RetrievedDetails;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox Orderidbox;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.PictureBox pictureBox6;
+        private System.Windows.Forms.Button ChangeStatus;
     }
 }
 
