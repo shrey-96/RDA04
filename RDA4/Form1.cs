@@ -52,10 +52,7 @@ namespace RDA4
                 cn.Close();
             }
 
-            // PanelAddCustomer.Visible = false;
-            // PanelAddVehicle.Visible = false;          
-            // PanelPlaceOrder.Visible = false;
-            // PanelHome.Visible = true;
+ 
             PanelHome.BringToFront();
 
             orderdate.MaxDate = DateTime.Now.Date;
@@ -513,6 +510,7 @@ namespace RDA4
                         // execute orderline query
                         GetDB(query, "", true);
 
+                        MessageBox.Show("Order Successfully placed!");
 
                         if (tradein != 0)
                         {
@@ -776,14 +774,33 @@ namespace RDA4
                 }
                 else
                 {
-                    query = "SELECT vin from orderline " +
+                    query = "SELECT vehicle.vin from orderline " +
                         "INNER JOIN orders on orderline.orderid=orders.orderid " +
-                        "INNER JOIN orderline.vin=vehicle.vin " +
+                        "INNER JOIN vehicle on orderline.vin=vehicle.vin " +
                         "where orders.orderid=" + orderid + ";";
 
                     check = GetDB(query, "vin", false);
+                    string vin = check;
+                    MessageBox.Show(vin);
 
+                    string date = DateTime.Now.ToString("yyyy-MM-dd");
                     
+
+                    // get the latest id
+                    query = "SELECT max(orderid) as maximum from orders";
+                    int newid = ParseInt(GetDB(query, "maximum", false)) + 1;
+
+                    // insert into order table
+                    query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
+                        "VALUES " +
+                        "(" + newid + ", '" + date + "', 'CNCL');";
+
+                    GetDB(query, "", true);
+
+                    // update instock flag
+                    query = "UPDATE vehicle SET instock='Yes' where vin='" + vin + "';";
+                    GetDB(query, "", true);
+
                 }
                 
             }
