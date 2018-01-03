@@ -526,6 +526,7 @@
             // 
             // dealerid
             // 
+            this.dealerid.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dealerid.FormattingEnabled = true;
             this.dealerid.Items.AddRange(new object[] {
             "Sportsworld",
@@ -564,6 +565,7 @@
             // 
             // orderstatusbox
             // 
+            this.orderstatusbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.orderstatusbox.FormattingEnabled = true;
             this.orderstatusbox.Items.AddRange(new object[] {
             "PAID",
@@ -586,10 +588,12 @@
             // 
             // tradeinbox
             // 
+            this.tradeinbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tradeinbox.Location = new System.Drawing.Point(407, 368);
             this.tradeinbox.Name = "tradeinbox";
-            this.tradeinbox.Size = new System.Drawing.Size(263, 22);
+            this.tradeinbox.Size = new System.Drawing.Size(263, 24);
             this.tradeinbox.TabIndex = 11;
+            this.tradeinbox.Text = "0";
             // 
             // label16
             // 
@@ -625,9 +629,10 @@
             // 
             // vid
             // 
+            this.vid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.vid.Location = new System.Drawing.Point(410, 227);
             this.vid.Name = "vid";
-            this.vid.Size = new System.Drawing.Size(260, 22);
+            this.vid.Size = new System.Drawing.Size(260, 24);
             this.vid.TabIndex = 6;
             // 
             // label14
@@ -643,9 +648,10 @@
             // 
             // phoneid
             // 
+            this.phoneid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.phoneid.Location = new System.Drawing.Point(410, 177);
             this.phoneid.Name = "phoneid";
-            this.phoneid.Size = new System.Drawing.Size(260, 22);
+            this.phoneid.Size = new System.Drawing.Size(260, 24);
             this.phoneid.TabIndex = 4;
             // 
             // label15
@@ -825,10 +831,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 647);
-            this.Controls.Add(this.PanelPlaceOrder);
-            this.Controls.Add(this.PanelHome);
             this.Controls.Add(this.PanelAddVehicle);
             this.Controls.Add(this.PanelAddCustomer);
+            this.Controls.Add(this.PanelPlaceOrder);
+            this.Controls.Add(this.PanelHome);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

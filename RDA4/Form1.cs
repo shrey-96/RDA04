@@ -49,14 +49,13 @@ namespace RDA4
             catch(Exception ex)
             {
                 MessageBox.Show("Error: " + ex);
-                cn.Clone();
+                cn.Close();
             }
 
             // PanelAddCustomer.Visible = false;
             // PanelAddVehicle.Visible = false;          
             // PanelPlaceOrder.Visible = false;
             // PanelHome.Visible = true;
-
             PanelHome.BringToFront();
 
             orderdate.MaxDate = DateTime.Now.Date;
@@ -199,9 +198,7 @@ namespace RDA4
 
             if (flag)
             {
-                if (branch == "Sportsworld") branchid = 1001;
-                else if (branch == "Guelph Auto Mall") branchid = 1002;
-                else branchid = 1003;
+                branchid = BranchId(branch);
             }
 
            // MessageBox.Show(branchid.ToString());
@@ -226,6 +223,18 @@ namespace RDA4
             
         }
 
+        // Return the branch id for selected branch
+        static int BranchId(string branch)
+        {
+            int branchid = 0;
+
+            if (branch == "Sportsworld") branchid = 1001;
+            else if (branch == "Guelph Auto Mall") branchid = 1002;
+            else branchid = 1003;
+
+            return branchid;
+        }
+
         // check if string is empty or not
         static bool IsValid(string box, int length)
         {
@@ -246,19 +255,6 @@ namespace RDA4
             PanelAddVehicle.BringToFront();
         }
 
-        // home button on add customer page
-        private void VehicleHome_Click(object sender, EventArgs e)
-        {
-            PanelHome.BringToFront(); 
-
-           vinbox.Clear();
-           makebox.Clear();
-           modelbox.Clear();
-           colourbox.Clear();
-           kmsbox.Clear();
-           pricebox.Clear();
-           
-        }
 
         // add customer from home
         private void AddCustomer_Click(object sender, EventArgs e)
@@ -325,15 +321,14 @@ namespace RDA4
         // place order click on place order page
         private void FinalOrder_Click(object sender, EventArgs e)
         {
-            PanelHome.BringToFront();
 
+            bool done = false;
 
             bool flag = true;
-            bool tempflag = false;
+            bool tempflag = true;
             bool exist = false;
             string query = "";
             string check = "";
-
 
 
             string phone = phoneid.Text;
@@ -342,12 +337,14 @@ namespace RDA4
             if (!tempflag) flag = false;
 
 
-
+            // get VIN and validate
             string vin = vid.Text;
             tempflag = ValidateVIN(vin);
             Error(vid, null, tempflag, "Please enter valid VIN (eg 12345678YEA -- 8 digits + 3 chars", 0);
             if (!tempflag) flag = false;
 
+            // Get dealer and validate
+            int branchid = 0;
             int valid = 0;
             string dealer = dealerid.Text;
             if (dealer == "")
@@ -355,15 +352,20 @@ namespace RDA4
                 valid = -1;
                 flag = false;
             }
-            else valid = 0;
+            else
+            {
+                valid = 0;
+                branchid = BranchId(dealer);
+            }
             Error(null, dealerid, tempflag, "Required Field", valid);
             
-
+            // get date
             string date = orderdate.Value.ToString("yyyy-MM-dd");
 
-
+            // get tradein
+            tempflag = true;
             int tradein = ParseInt(tradeinbox.Text);
-            if(tradein == -1) {
+            if(tradein < -1) {
                 flag = false;
                 tempflag = false;
             }
@@ -380,8 +382,6 @@ namespace RDA4
             Error(null, orderstatusbox, false, "Required Field", valid);
 
 
-            bool instockflag = true;
-            bool vehicleflag = true;
 
             if(flag)
             {
@@ -400,14 +400,114 @@ namespace RDA4
                     {
                         MessageBox.Show("Could not find the vehicle you're searching for.", "Error: Not Found");
                     }
+                    else
+                    {
+                        query = "SELECT make FROM vehicle where dealerid=" + branchid.ToString() + 
+                            " AND vin='" + vin + "';";
+                        check = GetDB(query, "make", false);
+                        //MessageBox.Show("-----" + check + "-------");
+                        if (check.ToLower() == "")
+                            MessageBox.Show("Vehicles is not at this dealership.");
+                        else
+                        {
+                            query = "SELECT instock FROM vehicle where vin='" + vin + "';";
+                            check = GetDB(query, "instock", false);
+                            if(check.ToLower() == " no")
+                            {
+                                MessageBox.Show("Vehicle is currenlty not in stock.");
+                            }
+                            else
+                                if(check.ToLower() == " hold")
+                            {
+                                MessageBox.Show("Vehicles is currently on hold by a customer.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Vehicle is available... Hurray!!!");
+                                done = true;
+                            }
+
+                        }
+                    }
                 }
                 else
                     MessageBox.Show("Could not find customer in database. Please click 'Add Customer' to add them.", "Error: Not Found");
 
+                if(done)
+                {
+                    string status = "";
+
+                    // check whether customer has paid or put on 'Hold'
+                    if (orderstatus.ToLower() == "hold")
+                    {
+                        status = "'Hold'";
+                    }
+                    else
+                    {
+                        status = "'No'";
+                    }
+
+                    // Update instock flag
+                    query = "UPDATE Vehicle " +
+                        "SET instock=" + status + " where vin='" + vin + "';";
+
+                    GetDB(query, "", true);
+
+                    // get the latest orderid
+                    query = "SELECT max(orderid) AS maximum from orders;";
+                    check = GetDB(query, "maximum", false);
+                    int orderid = ParseInt(check);
+                    if(orderid <= 5000)
+                    {
+                        orderid = 5000;
+                    }
+                    orderid++;
+
+                    // insert order into Ordertable
+                    query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
+                        "VALUES " +
+                        "(" + orderid.ToString() + ", '" + date + "', " + status + ");";
+                    GetDB(query, "", true);
+
+                    // get customer id for phonenumber from database
+                    query = "SELECT customerid FROM customer where phone='" + phone + "';";
+                    check = GetDB(query, "customerid", false);
+                    int customerid = ParseInt(check);
+                    if(customerid <= 100)
+                    {
+                        customerid = 100;
+                    }
+                    customerid++;
+
+                    // get latest orderlineid
+                    int orderlineid = 0;
+                    query = "SELECT max(orderlineid) AS maximum FROM orderline;";
+                    check = GetDB(query, "maximum", false);
+                    orderlineid = ParseInt(check);
+                    if(orderlineid <= 200)
+                    {
+                        orderlineid = 200;
+                    }
+                    orderlineid++;
+
+
+                    // insert into orderline
+                    query = "INSERT INTO OrderLine (OrderLineID, OrderID, CustomerID, DealerID, VIN, TradeIn) " +
+                        "VALUES " +
+                        "(" + orderlineid.ToString() + ", " + orderid.ToString() + ", " + customerid.ToString() + ", "
+                        + branchid.ToString() + ", '" + vin + "', " + tradein.ToString() + ")";
+
+                    GetDB(query, "", true);
+
+                    if (tradein != 0)
+                    {
+                        MessageBox.Show("Please enter the details of tradein car.");
+                        pricebox.Text = tradein.ToString();
+                        PanelAddVehicle.BringToFront();
+                    }
+                }
             }
 
-
-            // MessageBox.Show("Order Placed!");
         }
 
         // validate VIN (vehicle identification number)
@@ -445,6 +545,8 @@ namespace RDA4
             PanelAddCustomer.BringToFront();      
         }
 
+
+        // validate phone number
         static bool ValidatePhone(string phone)
         {
             bool flag = true;
@@ -474,10 +576,36 @@ namespace RDA4
             return flag;
         }
 
+
         private void HomeButton(object sender, EventArgs e)
         {
             PanelHome.BringToFront();
+            ClearAllTextBoxes();
         }
+
+        private void ClearAllTextBoxes()
+        {
+            // clear all textboxes of add vehicle page
+            vinbox.Clear();
+            makebox.Clear();
+            modelbox.Clear();
+            colourbox.Clear();
+            kmsbox.Clear();
+            pricebox.Clear();
+
+
+            // clear all textboxes of add customer
+            firstnamebox.Clear();
+            lastnamebox.Clear();
+            phonebox.Clear();
+
+            // clear all textboxes of place order
+            phoneid.Clear();
+            vid.Clear();
+            tradeinbox.Text = "0";
+
+        }
+
     }
    
 }
