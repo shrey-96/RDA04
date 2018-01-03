@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+* File:         Form1.cs
+* Project:      RDA4 - STWallu
+* By:           Shreyansh Tiwari
+* Date:         Janurary 3rd, 2017
+* Description:  This file consists of main logic of the progrm. The logic include
+*               validating the data, update, add the data to database. Read from the data
+*               base and update the data for customer to see.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +22,8 @@ using MySql.Data.MySqlClient;
 
 namespace RDA4
 {
+
+
     public partial class Form1 : Form
     {
 
@@ -59,29 +71,45 @@ namespace RDA4
 
         }
 
-
-        // get or insert into data base
+        /* Name:           GetDB()
+        *  Parameters:     string query - sql query to be sent to database
+        *                  string column - name of column trying to retrieve data from
+        *                  bool insert : true if inserting/updating data, false.
+        *  Return value:   string - string returned by select statment
+        *  Description:    This method is invoked to interact with SQL database, get and set
+        *                  data over there.
+        */
         static string GetDB(string query, string column, bool insert)
         {
             // set the query to command text
             cmd.CommandText = query;
             MySqlDataReader reader;
+
+            // execute the query
             reader = cmd.ExecuteReader();
             string final = "";
 
             if (insert == false)
             {
+                // read from reader
                 while (reader.Read())
                 {
                     final = final + " " + reader[column];
                 }
             }
-            reader.Close();
 
+            // close reader
+            reader.Close();
+                        
             return final;
         }
 
-        // validate positive integer
+        /*  Name:          ParseInt()
+        *  Parameters:     string value - the string that has integer value
+        *  Return value:   int - return the parsed int
+        *                  -1: if the string is not a valid value
+        *  Description:    This method is invoked to parse the integer from string.
+        */
         static int ParseInt(string value)
         {
             int result = 0;
@@ -93,11 +121,23 @@ namespace RDA4
             return result;
         }
 
-        // error provider based on conditions
+        /*  
+        *  Name:           Error()
+        *  Parameters:     TextBox box - the textbox near which error is to be shows
+        *                  Combobox combo - combo box that needs to be displayed error near.
+        *                  bool valid - whether or not validation succeeded or not
+        *                  string msg - the message the needs to be shown with error.
+        *                  int comboflag - the validation success flag for combo box
+        *                  
+        *  Return value:   null
+        *  Description:    This method is invoked to display error on failed validation.
+        *                  And also to remove the error once validated.
+        */
         private void Error(TextBox box, ComboBox combo, bool valid, string msg, int ComboFlag)
         {
             try
             {
+                // textbox
                 if (combo == null)
                 {
                     if (!valid)
@@ -105,6 +145,7 @@ namespace RDA4
                     else
                         ep.SetError(box, "");
                 }
+                // combobox
                 else
                 {
                     if (ComboFlag == -1)
@@ -119,38 +160,49 @@ namespace RDA4
             }
         }
 
-        // add vehicle page
+        /* 
+        *  Name:           SubmitAddV_Click()
+        *  Parameters:     object, Event
+        *  Return value:   null
+        *  Description:    This method is invoked when add vehicle button is clicked.
+        *                  It retrieves the data from textboxes/form, and validate them
+        *                  and add them to database once validated
+        */
         private void SubmitAddV_Click(object sender, EventArgs e)
         {
             bool flag = true;
             bool tempflag = false;
 
+            // vin
             string vin = vinbox.Text;
             tempflag = IsValid(vin, 11);
             Error(vinbox, null, tempflag, "Please enter valid VIN (11 characters)", 0);
             if (!tempflag) flag = false;
 
+            // year
             int vyear = ParseInt(yearbox.Text);
             Error(null, yearbox, false, "Please choose year from droplist!", vyear);
             if (vyear == -1) flag = false;
 
-
+            // manufacture
             string make = makebox.Text;
             tempflag = IsValid(make, -1);
             Error(makebox, null, tempflag, "Required Field", 0);
             if (!tempflag) flag = false;
 
+            // model
             string model = modelbox.Text;
             tempflag = IsValid(model, -1);
             Error(modelbox, null, tempflag, "Required Field", 0);
             if (!tempflag) flag = false;
 
+            // colour
             string colour = colourbox.Text;
             tempflag = IsValid(colour, -1);
             Error(colourbox, null, tempflag, "Required Field", 0);
             if (!tempflag) flag = false;
 
-
+            // kms that car traveled
             int kms = ParseInt(kmsbox.Text);
             if (kms < 0)
             {
@@ -159,6 +211,7 @@ namespace RDA4
             }
             else ep.SetError(kmsbox, "");
 
+            // wholesale price
             int wprice = ParseInt(pricebox.Text);
             if (wprice < 0)
             {
@@ -167,6 +220,7 @@ namespace RDA4
             }
             else ep.SetError(pricebox, "");
 
+            // instock
             string instock = instockbox.Text;
             if (instock == "")
             {
@@ -176,6 +230,7 @@ namespace RDA4
             else
                 ep.SetError(instockbox, "");
 
+            // branch
             string branch = branchbox.Text;
             if (branch == "")
             {
@@ -185,7 +240,7 @@ namespace RDA4
             else
                 ep.SetError(branchbox, "");
 
-
+            // validate integer textboxes
             if (vyear == -1 || kms == -1 || wprice == -1)
             {
                 flag = false;
@@ -201,7 +256,7 @@ namespace RDA4
             // MessageBox.Show(branchid.ToString());
 
 
-
+            // insert into vehicle once validated all the fields
             if (flag)
             {
                 string query =
@@ -220,7 +275,13 @@ namespace RDA4
 
         }
 
-        // Return the branch id for selected branch
+        /* 
+        *  Name:           BranchId()
+        *  Parameters:     string branch - branch string from dropdown
+        *  Return value:   int branchid - the dealerid
+        *  Description:    This method is invoked to get the branch id of a particular
+        *                  branch.
+        */
         static int BranchId(string branch)
         {
             int branchid = 0;
@@ -232,7 +293,14 @@ namespace RDA4
             return branchid;
         }
 
-        // check if string is empty or not
+        /* 
+        *  Name:           IsValid()
+        *  Parameters:     string box - value from textbox
+        *                  length - length of string
+        *  Return value:   bool - true if valid otherwise false
+        *  Description:    This method is invoked to validate value from
+        *                  textboxes.
+        */
         static bool IsValid(string box, int length)
         {
             bool flag = true;
@@ -240,42 +308,64 @@ namespace RDA4
             if (box.Length == 0)
                 flag = false;
 
+            // if length is 11, its VIN
             if (length == 11 && box.Length != 11)
                 flag = false;
 
             return flag;
         }
 
-        // add vehicle from home
+        /* 
+        *  Name:           AddVehicle_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method is invoked when add vehice is clicked on the home screen.
+        *                  It gets the add vehicle page in the front.
+        */
         private void AddVehicle_Click(object sender, EventArgs e)
         {
             PanelAddVehicle.BringToFront();
         }
 
 
-        // add customer from home
+        /* 
+        *  Name:           AddCustomer_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method is invoked when add customer is clicked on the home screen.
+        *                  It gets the add customer page to front.
+        */
         private void AddCustomer_Click(object sender, EventArgs e)
         {
             PanelAddCustomer.BringToFront();
 
         }
 
-        // add customer page
+        /* 
+        *  Name:           AddCustomer_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method is invoked to validate the customer fields. 
+        *                  Once validated, they are added to database.
+        */
         private void AddCustomerDB_Click(object sender, EventArgs e)
         {
             bool flag = true;
             bool tempflag = false;
 
+            // firstname
             string firstname = firstnamebox.Text;
             tempflag = IsValid(firstname, 0);
             if (!tempflag) flag = false;
             Error(firstnamebox, null, tempflag, "Required Field", 0);
 
+            // lastname
             string lastname = lastnamebox.Text;
             tempflag = IsValid(lastname, 0);
             if (!tempflag) flag = false;
             Error(lastnamebox, null, tempflag, "Required Field", 0);
 
+            // phone
             string phone = phonebox.Text;
             if (phone.Length != 12)
             {
@@ -286,6 +376,20 @@ namespace RDA4
                 tempflag = true;
             Error(phonebox, null, tempflag, "Invalid entry. Supported Format (XXX-XXX-XXXX).", 0);
 
+            // once validated, check if already exist
+            if(flag)
+            {
+                string query = "SELECT customerid FROM customer where phone='" + phone + "';";
+                string check = GetDB(query, "customerid", false);
+
+                if(check != "")
+                {
+                    flag = false;
+                    MessageBox.Show("A customer with this phone already exist.", "Error");
+                }
+            }
+
+            // add if not exist
             if (flag)
             {
                 string query = "SELECT max(customerid) as maximum from customer;";
@@ -301,21 +405,33 @@ namespace RDA4
                 MessageBox.Show("Successfully added customer!");
             }
 
+            // go back to home
             if (flag)
             {
                 PanelAddCustomer.SendToBack();
+                ClearAllTextBoxes();
             }
-
-
         }
 
-        // place order from home
+        /* 
+       *  Name:           PlaceOrder_Click()
+       *  Parameters:     object, EventArgs
+       *  Return value:   null
+       *  Description:    This method is invoked when place order is click on home. 
+       *                  Brings the placeorder page in front.
+       */
         private void PlaceOrder_Click(object sender, EventArgs e)
         {
             PanelPlaceOrder.BringToFront();
         }
 
-        // place order click on place order page
+        /* 
+        *  Name:           FinalOrder_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method is invoked to validate the placeorder fields
+        *                  and add to database once validated.
+        */
         private void FinalOrder_Click(object sender, EventArgs e)
         {
 
@@ -327,7 +443,7 @@ namespace RDA4
             string query = "";
             string check = "";
 
-
+            // phone
             string phone = phoneid.Text;
             tempflag = ValidatePhone(phone);
             Error(phoneid, null, tempflag, "Please enter a valid phone number (XXX-XXX-XXXX)", 0);
@@ -370,6 +486,7 @@ namespace RDA4
 
 
             valid = 0;
+            // order status
             string orderstatus = orderstatusbox.Text;
             if (orderstatus == "")
             {
@@ -379,7 +496,7 @@ namespace RDA4
             Error(null, orderstatusbox, false, "Required Field", valid);
 
 
-
+            // customer exist
             if (flag)
             {
                 query = "SELECT customerid FROM customer where phone='" + phone + "';";
@@ -389,6 +506,7 @@ namespace RDA4
                     exist = true;
                 }
 
+                // vehicle exist
                 if (exist)
                 {
                     query = "SELECT make from Vehicle where vin='" + vin + "';";
@@ -429,6 +547,7 @@ namespace RDA4
                 else
                     MessageBox.Show("Could not find customer in database. Please click 'Add Customer' to add them.", "Error: Not Found");
 
+                // check the status and update
                 if (done)
                 {
                     string status = "";
@@ -527,14 +646,20 @@ namespace RDA4
 
         }
 
-        // validate VIN (vehicle identification number)
+        /* 
+        *  Name:           ValidateVIN()
+        *  Parameters:     string vin - VIN of vehicle
+        *  Return value:   null
+        *  Description:    This method validated the VIN value entered.
+        */
         static bool ValidateVIN(string vin)
         {
             bool flag = true;
-
+            // check length
             if (vin.Length != 11)
                 flag = false;
 
+            // check characters
             if (flag)
             {
                 for (int i = 0; i < vin.Length; i++)
@@ -556,7 +681,13 @@ namespace RDA4
         }
 
 
-        // add customer on place order page
+        /* 
+        *  Name:           AddCustomerFromOrder_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method is invoked to add customer from order page.
+        *                  Bring add customer page on front.
+        */
         private void AddCustomerFromOrder_Click(object sender, EventArgs e)
         {
             PanelAddCustomer.BringToFront();
@@ -621,6 +752,13 @@ namespace RDA4
             phoneid.Clear();
             vid.Clear();
             tradeinbox.Text = "0";
+
+            // clear inventory listbox
+            InvList.Items.Clear();
+
+            // clear modify order textboxes
+            Orderidbox.Clear();
+            RetrievedDetails.Clear();
 
             OrderDetails.Clear();
 
@@ -774,36 +912,114 @@ namespace RDA4
                 }
                 else
                 {
-                    query = "SELECT vehicle.vin from orderline " +
-                        "INNER JOIN orders on orderline.orderid=orders.orderid " +
-                        "INNER JOIN vehicle on orderline.vin=vehicle.vin " +
-                        "where orders.orderid=" + orderid + ";";
+                    MessageBox.Show("Order Cancelled..");
+                    //query = "SELECT vehicle.vin from orderline " +
+                    //    "INNER JOIN orders on orderline.orderid=orders.orderid " +
+                    //    "INNER JOIN vehicle on orderline.vin=vehicle.vin " +
+                    //    "where orders.orderid=" + orderid + ";";
 
-                    check = GetDB(query, "vin", false);
-                    string vin = check;
-                    MessageBox.Show(vin);
+                    //check = GetDB(query, "vin", false);
+                    //string vin = check;
+                    //MessageBox.Show(vin);
 
-                    string date = DateTime.Now.ToString("yyyy-MM-dd");
+                    //string date = DateTime.Now.ToString("yyyy-MM-dd");
                     
 
-                    // get the latest id
-                    query = "SELECT max(orderid) as maximum from orders";
-                    int newid = ParseInt(GetDB(query, "maximum", false)) + 1;
+                    //// get the latest id
+                    //query = "SELECT max(orderid) as maximum from orders";
+                    //int newid = ParseInt(GetDB(query, "maximum", false)) + 1;
 
-                    // insert into order table
-                    query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
-                        "VALUES " +
-                        "(" + newid + ", '" + date + "', 'CNCL');";
+                    //// insert into order table
+                    //query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
+                    //    "VALUES " +
+                    //    "(" + newid + ", '" + date + "', 'CNCL');";
 
-                    GetDB(query, "", true);
+                    //GetDB(query, "", true);
 
-                    // update instock flag
-                    query = "UPDATE vehicle SET instock='Yes' where vin='" + vin + "';";
-                    GetDB(query, "", true);
+                    //// update instock flag
+                    //query = "UPDATE vehicle SET instock='Yes' where vin='" + vin + "';";
+                    //GetDB(query, "", true);
 
                 }
                 
             }
+        }
+
+        private void ExitWally_Click(object sender, EventArgs e)
+        {
+            DialogResult Confirmation = MessageBox.Show("Are you sure you want to exit?", "Confirm", MessageBoxButtons.YesNo);
+            if(Confirmation == DialogResult.Yes)
+            {
+                this.Close();
+                cn.Close();
+            }
+        }
+
+        private void SearchInventory_Click(object sender, EventArgs e)
+        {
+            string temp = DealershipSelect.Text;
+            int selected = 0;
+            int branchid = 0;
+            string query = "";
+            string check = "";
+            
+            if(temp == "")
+            {
+                selected = -1;
+            }
+
+            Error(null, DealershipSelect, false, "Required field", selected);
+
+            if (selected != -1)
+            {
+                branchid = BranchId(temp);
+                query = "SELECT concat(instock, ' --', vin, ': ', make, ' ', model) as Details" +
+                    " from vehicle where dealerid=" + branchid + ";";
+                // check = GetDB(query, "Details", false);
+
+                //  MessageBox.Show(check);
+
+                cmd.CommandText = query;
+                MySqlDataReader reader;
+                reader = cmd.ExecuteReader();
+                string final = "";
+
+
+                while (reader.Read())
+                {
+                    final = final + " " + reader["Details"] + "#";
+                    //InvList.Items.Add(final);
+                }
+                reader.Close();
+
+                try
+                {
+                    string[] items = final.Split('#');
+                    int count = 0;
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        InvList.Items.Add(items[i]);
+                        count++;
+                    }
+
+                   // MessageBox.Show(count.ToString());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex);
+                }
+            }
+
+
+
+
+
+
+        }
+
+        private void InventoryLevel_Click(object sender, EventArgs e)
+        {
+            PanelInventory.BringToFront();
         }
     } 
     
