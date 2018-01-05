@@ -338,7 +338,7 @@ namespace RDA4
         private void AddCustomer_Click(object sender, EventArgs e)
         {
             PanelAddCustomer.BringToFront();
-
+            firstnamebox.Focus();
         }
 
         /* 
@@ -575,7 +575,8 @@ namespace RDA4
                     if (Confirmation == DialogResult.Yes)
                     {
                         string stock = "";
-                        if (status.Contains("Paid"))
+                      //  status = status.ToLower();
+                        if (status.ToLower().Contains("paid"))
                             stock = "'No'";
                         else
                             stock = status;
@@ -633,11 +634,65 @@ namespace RDA4
 
                         if (tradein != 0)
                         {
-                            MessageBox.Show("Please enter the details of tradein car.");
-                            pricebox.Text = tradein.ToString();
-                            PanelAddVehicle.BringToFront();
+                          //  MessageBox.Show("Please enter the details of tradein car.");
+                          //  pricebox.Text = tradein.ToString();
+                          //  PanelAddVehicle.BringToFront();
                         }
+                        // ------------------------
 
+                        // get customer name
+                        query = "select concat(firstname, ' ', lastname) as 'Customer' from customer" +
+                            " where phone='" + phone + "';";
+                        check = GetDB(query, "Customer", false);
+                        string cus = check;
+
+                        query = "SELECT kms from vehicle where vin='" + vin + "';";
+                        check = GetDB(query, "kms", false);
+                        string kms = check;
+
+                        // salutation
+                        string x1 = "Thank you for choosing Wally's World of Wheels at " + dealer +
+                            " for quality used vehicle! \n\n";
+
+                        // date, customer, orderid, orderstatus
+                        string date1 = "Date: " + date + "\n";
+                        string x2 = "Customer: " + cus + "\n";
+                        string x3 = "Order ID: " + orderid + " - " + orderstatus + "\n\n";
+
+                        // vehicle details
+                        query = "select concat(v_year, ' ', make, ' ', model, ', ', colour) as vehicles" +
+                            " from vehicle where vin='" + vin + "';";
+                        check = GetDB(query, "vehicles", false);
+
+                        // vehicle name
+                        string x4 = check + "\n";
+                        string x5 = "VIN: " + vin.ToUpper() + " " + "KMS: " + kms + "\n\n";
+
+                        // purchase price
+                        query = "select wprice from vehicle where vin='" + vin + "';";
+                        int wprice = ParseInt(GetDB(query, "wprice", false));
+                        string x6 = "Purchase Price: $" + wprice + "\n\n";
+
+                        // trade in
+                        string x7 = "Trade In: $" + tradein + "\n\n";
+
+                        // sub total
+                        int subtotal = wprice - tradein;
+                        string x8 = "Subtotal = $" + subtotal + "\n";
+
+                        // HST
+                        double HST = subtotal * 0.13;
+                        string x9 = "HST (13%) = $" + HST + "\n";
+                        string x10 = "Sale Total = $" + (subtotal + HST).ToString() + "\n";
+
+                        SalesOrderBox.Clear();
+                        SalesOrderBox.Text = x1 + date1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10;
+                        PanelSalesOrder.BringToFront();
+
+                        
+
+
+                        //-----------------------
                         PanelPlaceOrder.SendToBack();
                     }
 
@@ -691,6 +746,7 @@ namespace RDA4
         private void AddCustomerFromOrder_Click(object sender, EventArgs e)
         {
             PanelAddCustomer.BringToFront();
+            firstnamebox.Focus();
         }
 
 
@@ -784,7 +840,7 @@ namespace RDA4
         }
 
         /* 
-        *  Name:          OrderHistory_Click()
+        *  Name:           OrderHistory_Click()
         *  Parameters:     object, EventArgs
         *  Return value:   null
         *  Description:    This method gets the orders from database and display
@@ -1034,6 +1090,7 @@ namespace RDA4
             // if dealer selected
             if (selected != -1)
             {
+                ClearAllTextBoxes();
                 branchid = BranchId(temp);
                 query = "SELECT concat(instock, ' --', vin, ': ', make, ' ', model) as Details" +
                     " from vehicle where dealerid=" + branchid + ";";

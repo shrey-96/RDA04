@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.PanelHome = new System.Windows.Forms.Panel();
+            this.InventoryLevel = new System.Windows.Forms.Button();
             this.ExitWally = new System.Windows.Forms.Button();
             this.OrderHistory = new System.Windows.Forms.Button();
             this.ModifyOrder = new System.Windows.Forms.Button();
@@ -102,14 +103,18 @@
             this.label21 = new System.Windows.Forms.Label();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.ChangeStatus = new System.Windows.Forms.Button();
-            this.InventoryLevel = new System.Windows.Forms.Button();
             this.PanelInventory = new System.Windows.Forms.Panel();
+            this.InvList = new System.Windows.Forms.ListBox();
+            this.DealershipSelect = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
             this.label23 = new System.Windows.Forms.Label();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.SearchInventory = new System.Windows.Forms.Button();
-            this.DealershipSelect = new System.Windows.Forms.ComboBox();
-            this.InvList = new System.Windows.Forms.ListBox();
+            this.PanelSalesOrder = new System.Windows.Forms.Panel();
+            this.SalesOrderBox = new System.Windows.Forms.RichTextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.PanelHome.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.PanelAddVehicle.SuspendLayout();
@@ -125,6 +130,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.PanelInventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            this.PanelSalesOrder.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelHome
@@ -145,6 +152,21 @@
             this.PanelHome.Name = "PanelHome";
             this.PanelHome.Size = new System.Drawing.Size(1063, 647);
             this.PanelHome.TabIndex = 0;
+            // 
+            // InventoryLevel
+            // 
+            this.InventoryLevel.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.InventoryLevel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("InventoryLevel.BackgroundImage")));
+            this.InventoryLevel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.InventoryLevel.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.InventoryLevel.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InventoryLevel.Location = new System.Drawing.Point(598, 388);
+            this.InventoryLevel.Name = "InventoryLevel";
+            this.InventoryLevel.Size = new System.Drawing.Size(243, 42);
+            this.InventoryLevel.TabIndex = 7;
+            this.InventoryLevel.Text = "Inventory Level";
+            this.InventoryLevel.UseVisualStyleBackColor = false;
+            this.InventoryLevel.Click += new System.EventHandler(this.InventoryLevel_Click);
             // 
             // ExitWally
             // 
@@ -786,16 +808,18 @@
             // 
             // phonebox
             // 
+            this.phonebox.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.phonebox.Location = new System.Drawing.Point(370, 323);
             this.phonebox.Name = "phonebox";
-            this.phonebox.Size = new System.Drawing.Size(260, 22);
+            this.phonebox.Size = new System.Drawing.Size(260, 28);
             this.phonebox.TabIndex = 7;
             // 
             // lastnamebox
             // 
+            this.lastnamebox.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lastnamebox.Location = new System.Drawing.Point(370, 239);
             this.lastnamebox.Name = "lastnamebox";
-            this.lastnamebox.Size = new System.Drawing.Size(260, 22);
+            this.lastnamebox.Size = new System.Drawing.Size(260, 28);
             this.lastnamebox.TabIndex = 6;
             // 
             // label11
@@ -811,9 +835,10 @@
             // 
             // firstnamebox
             // 
+            this.firstnamebox.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.firstnamebox.Location = new System.Drawing.Point(370, 163);
             this.firstnamebox.Name = "firstnamebox";
-            this.firstnamebox.Size = new System.Drawing.Size(260, 22);
+            this.firstnamebox.Size = new System.Drawing.Size(260, 28);
             this.firstnamebox.TabIndex = 4;
             // 
             // label10
@@ -874,10 +899,10 @@
             // 
             // OrderDetails
             // 
-            this.OrderDetails.Font = new System.Drawing.Font("Arial Narrow", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OrderDetails.Location = new System.Drawing.Point(241, 163);
+            this.OrderDetails.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OrderDetails.Location = new System.Drawing.Point(221, 163);
             this.OrderDetails.Name = "OrderDetails";
-            this.OrderDetails.Size = new System.Drawing.Size(498, 407);
+            this.OrderDetails.Size = new System.Drawing.Size(694, 407);
             this.OrderDetails.TabIndex = 27;
             this.OrderDetails.Text = "";
             // 
@@ -900,7 +925,7 @@
             // 
             this.pictureBox5.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(124, 3);
+            this.pictureBox5.Location = new System.Drawing.Point(159, -1);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(734, 107);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1034,21 +1059,6 @@
             this.ChangeStatus.UseVisualStyleBackColor = false;
             this.ChangeStatus.Click += new System.EventHandler(this.ChangeStatus_Click);
             // 
-            // InventoryLevel
-            // 
-            this.InventoryLevel.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.InventoryLevel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("InventoryLevel.BackgroundImage")));
-            this.InventoryLevel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.InventoryLevel.Cursor = System.Windows.Forms.Cursors.HSplit;
-            this.InventoryLevel.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InventoryLevel.Location = new System.Drawing.Point(598, 388);
-            this.InventoryLevel.Name = "InventoryLevel";
-            this.InventoryLevel.Size = new System.Drawing.Size(243, 42);
-            this.InventoryLevel.TabIndex = 7;
-            this.InventoryLevel.Text = "Inventory Level";
-            this.InventoryLevel.UseVisualStyleBackColor = false;
-            this.InventoryLevel.Click += new System.EventHandler(this.InventoryLevel_Click);
-            // 
             // PanelInventory
             // 
             this.PanelInventory.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelInventory.BackgroundImage")));
@@ -1065,6 +1075,29 @@
             this.PanelInventory.Name = "PanelInventory";
             this.PanelInventory.Size = new System.Drawing.Size(1063, 647);
             this.PanelInventory.TabIndex = 27;
+            // 
+            // InvList
+            // 
+            this.InvList.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InvList.FormattingEnabled = true;
+            this.InvList.ItemHeight = 29;
+            this.InvList.Location = new System.Drawing.Point(257, 257);
+            this.InvList.Name = "InvList";
+            this.InvList.Size = new System.Drawing.Size(547, 207);
+            this.InvList.TabIndex = 28;
+            // 
+            // DealershipSelect
+            // 
+            this.DealershipSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DealershipSelect.FormattingEnabled = true;
+            this.DealershipSelect.Items.AddRange(new object[] {
+            "Sportsworld",
+            "Guelph Auto Mall",
+            "Waterloo"});
+            this.DealershipSelect.Location = new System.Drawing.Point(406, 136);
+            this.DealershipSelect.Name = "DealershipSelect";
+            this.DealershipSelect.Size = new System.Drawing.Size(263, 24);
+            this.DealershipSelect.TabIndex = 27;
             // 
             // button3
             // 
@@ -1118,41 +1151,81 @@
             this.SearchInventory.UseVisualStyleBackColor = false;
             this.SearchInventory.Click += new System.EventHandler(this.SearchInventory_Click);
             // 
-            // DealershipSelect
+            // PanelSalesOrder
             // 
-            this.DealershipSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DealershipSelect.FormattingEnabled = true;
-            this.DealershipSelect.Items.AddRange(new object[] {
-            "Sportsworld",
-            "Guelph Auto Mall",
-            "Waterloo"});
-            this.DealershipSelect.Location = new System.Drawing.Point(406, 136);
-            this.DealershipSelect.Name = "DealershipSelect";
-            this.DealershipSelect.Size = new System.Drawing.Size(263, 24);
-            this.DealershipSelect.TabIndex = 27;
+            this.PanelSalesOrder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelSalesOrder.BackgroundImage")));
+            this.PanelSalesOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PanelSalesOrder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelSalesOrder.Controls.Add(this.label20);
+            this.PanelSalesOrder.Controls.Add(this.SalesOrderBox);
+            this.PanelSalesOrder.Controls.Add(this.button4);
+            this.PanelSalesOrder.Controls.Add(this.pictureBox8);
+            this.PanelSalesOrder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelSalesOrder.Location = new System.Drawing.Point(0, 0);
+            this.PanelSalesOrder.Name = "PanelSalesOrder";
+            this.PanelSalesOrder.Size = new System.Drawing.Size(1063, 647);
+            this.PanelSalesOrder.TabIndex = 28;
             // 
-            // InvList
+            // SalesOrderBox
             // 
-            this.InvList.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InvList.FormattingEnabled = true;
-            this.InvList.ItemHeight = 29;
-            this.InvList.Location = new System.Drawing.Point(257, 257);
-            this.InvList.Name = "InvList";
-            this.InvList.Size = new System.Drawing.Size(547, 207);
-            this.InvList.TabIndex = 28;
+            this.SalesOrderBox.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SalesOrderBox.Location = new System.Drawing.Point(250, 149);
+            this.SalesOrderBox.Name = "SalesOrderBox";
+            this.SalesOrderBox.Size = new System.Drawing.Size(519, 458);
+            this.SalesOrderBox.TabIndex = 27;
+            this.SalesOrderBox.Text = "";
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.button4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button4.BackgroundImage")));
+            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button4.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.button4.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.Location = new System.Drawing.Point(12, 514);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(156, 66);
+            this.button4.TabIndex = 26;
+            this.button4.Text = "Home";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.HomeButton);
+            // 
+            // pictureBox8
+            // 
+            this.pictureBox8.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
+            this.pictureBox8.Location = new System.Drawing.Point(124, 3);
+            this.pictureBox8.Name = "pictureBox8";
+            this.pictureBox8.Size = new System.Drawing.Size(734, 107);
+            this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox8.TabIndex = 2;
+            this.pictureBox8.TabStop = false;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label20.Font = new System.Drawing.Font("Arial Narrow", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label20.Location = new System.Drawing.Point(444, 113);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(144, 33);
+            this.label20.TabIndex = 28;
+            this.label20.Text = "Sales Order";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 647);
-            this.Controls.Add(this.PanelHome);
-            this.Controls.Add(this.PanelAddVehicle);
             this.Controls.Add(this.PanelOrderHistory);
             this.Controls.Add(this.PanelModifyOrder);
             this.Controls.Add(this.PanelInventory);
             this.Controls.Add(this.PanelAddCustomer);
             this.Controls.Add(this.PanelPlaceOrder);
+            this.Controls.Add(this.PanelHome);
+            this.Controls.Add(this.PanelAddVehicle);
+            this.Controls.Add(this.PanelSalesOrder);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1175,6 +1248,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             this.PanelInventory.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            this.PanelSalesOrder.ResumeLayout(false);
+            this.PanelSalesOrder.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1261,6 +1337,11 @@
         private System.Windows.Forms.PictureBox pictureBox7;
         private System.Windows.Forms.Button SearchInventory;
         private System.Windows.Forms.ListBox InvList;
+        private System.Windows.Forms.Panel PanelSalesOrder;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.RichTextBox SalesOrderBox;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.PictureBox pictureBox8;
     }
 }
 
