@@ -64,7 +64,7 @@ namespace RDA4
                 cn.Close();
             }
 
- 
+
             PanelHome.BringToFront();
 
             orderdate.MaxDate = DateTime.Now.Date;
@@ -100,7 +100,7 @@ namespace RDA4
 
             // close reader
             reader.Close();
-                        
+
             return final;
         }
 
@@ -377,12 +377,12 @@ namespace RDA4
             Error(phonebox, null, tempflag, "Invalid entry. Supported Format (XXX-XXX-XXXX).", 0);
 
             // once validated, check if already exist
-            if(flag)
+            if (flag)
             {
                 string query = "SELECT customerid FROM customer where phone='" + phone + "';";
                 string check = GetDB(query, "customerid", false);
 
-                if(check != "")
+                if (check != "")
                 {
                     flag = false;
                     MessageBox.Show("A customer with this phone already exist.", "Error");
@@ -478,7 +478,8 @@ namespace RDA4
             // get tradein
             tempflag = true;
             int tradein = ParseInt(tradeinbox.Text);
-            if (tradein < -1) {
+            if (tradein < -1)
+            {
                 flag = false;
                 tempflag = false;
             }
@@ -555,7 +556,7 @@ namespace RDA4
                     // check whether customer has paid or put on 'Hold'
                     if (orderstatus.ToLower() == "hold")
                     {
-                        status = "'Hold'";
+                        status = "'HOLD'";
                     }
                     else
                     {
@@ -575,7 +576,7 @@ namespace RDA4
                     if (Confirmation == DialogResult.Yes)
                     {
                         string stock = "";
-                      //  status = status.ToLower();
+                        //  status = status.ToLower();
                         if (status.ToLower().Contains("paid"))
                             stock = "'No'";
                         else
@@ -634,9 +635,9 @@ namespace RDA4
 
                         if (tradein != 0)
                         {
-                          //  MessageBox.Show("Please enter the details of tradein car.");
-                          //  pricebox.Text = tradein.ToString();
-                          //  PanelAddVehicle.BringToFront();
+                            //  MessageBox.Show("Please enter the details of tradein car.");
+                            //  pricebox.Text = tradein.ToString();
+                            //  PanelAddVehicle.BringToFront();
                         }
                         // ------------------------
 
@@ -652,7 +653,7 @@ namespace RDA4
 
                         // salutation
                         string x1 = "Thank you for choosing Wally's World of Wheels at " + dealer +
-                            " for quality used vehicle! \n\n";
+                            " for quality used vehicle\n\n";
 
                         // date, customer, orderid, orderstatus
                         string date1 = "Date: " + date + "\n";
@@ -689,7 +690,7 @@ namespace RDA4
                         SalesOrderBox.Text = x1 + date1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10;
                         PanelSalesOrder.BringToFront();
 
-                        
+
 
 
                         //-----------------------
@@ -821,7 +822,7 @@ namespace RDA4
             firstnamebox.Clear();
             lastnamebox.Clear();
             phonebox.Clear();
-            
+
 
             // clear all textboxes of place order
             phoneid.Clear();
@@ -865,6 +866,7 @@ namespace RDA4
             check = GetDB(query, "minimum", false);
             min = ParseInt(check);
 
+            // get details of all orders and update order history
             for (int i = min; i <= max; i++)
             {
                 count++;
@@ -913,7 +915,7 @@ namespace RDA4
 
             int orderid = ParseInt(temp);
 
-            
+
 
             if (orderid < 1000 || orderid > 9999)
                 validformat = false;
@@ -941,7 +943,7 @@ namespace RDA4
                     RetrievedDetails.Text = check;
 
 
-                   
+
                 }
                 else
                 {
@@ -965,19 +967,31 @@ namespace RDA4
             bool Changeable = false;
             bool cancel = false;
             bool paid = false;
+            bool valid = true;
 
             string temp = RetrievedDetails.Text;
+            if (temp.Length < 2)
+            {
+                ep.SetError(Orderidbox, "Please enter valid order id.");
+                return;
+            }
+            else
+                ep.SetError(Orderidbox, "");
+
+
+
             temp = temp.Substring(0, 5);
+           // MessageBox.Show("--" + temp + "--");
 
             // status is not already paid
-            if (temp.ToLower() != " paid")
+            if (temp.ToLower() != " paid" && !temp.ToLower().Contains("cncl"))
             {
                 ep.SetError(RetrievedDetails, "");
                 Changeable = true;
 
             }
             else
-                ep.SetError(RetrievedDetails, "Status is already PAID. Can't be altered now!");
+                ep.SetError(RetrievedDetails, "Status can't be altered if already PAID or CANCELLED!");
 
             // change status
             if (Changeable)
@@ -986,24 +1000,70 @@ namespace RDA4
                 if (status.ToLower() == "cncl")
                 {
                     cancel = true;
-
                 }
                 else
                     if (status.ToLower() == "paid")
-                    {
-                        paid = true;
-                    }
+                {
+                    MessageBox.Show("PAIDDDDDDDDD");
+                    paid = true;
+                }
 
             }
 
             string query = "";
             string check = "";
+            string vin = "";
+            string phone = "";
+            int branchid = 0;
+            int orderid = 0;
+
+            // verify orderid
+            check = Orderidbox.Text;
+            orderid = ParseInt(check);
+
+            // check if order id changed after detail appeared in text box
+            if (orderid != -1)
+            {
+                query = "SELECT orderdate from orders where orderid =" + orderid + ";";
+                check = GetDB(query, "orderdate", false);
+
+                if (check == "")
+                {
+                    ep.SetError(Orderidbox, "Invalid Orderid");
+                    valid = false;
+                }
+                else
+                    ep.SetError(Orderidbox, "");
+            }
+
+            // get vin
+            query = "SELECT vin FROM orderline where orderid=" + orderid + ";";
+            check = GetDB(query, "vin", false);
+            vin = check;
+            vin = vin.Substring(1);
+            // MessageBox.Show("--" + vin + "--");
+
+            // get phone number of customer
+            query = "SELECT phone FROM orderline " +
+                "INNER JOIN customer on orderline.customerid=customer.customerid " +
+                "where orderid=" + orderid + ";";
+            phone = GetDB(query, "phone", false);
+            phone = phone.Substring(1);
+            //MessageBox.Show("--" + phone + "--");
+
+            // get branch id
+            query = "SELECT dealerid FROM orderline " +
+                 "where orderid=" + orderid + ";";
+            branchid = ParseInt(GetDB(query, "dealerid", false));
+            //  MessageBox.Show("--" + branchid.ToString() + "--");
+
+
 
             // cancel it
-            if(cancel)
+            if (cancel && valid)
             {
                 temp = Orderidbox.Text;
-                int orderid = ParseInt(temp);
+                orderid = ParseInt(temp);
 
                 query = "SELECT instock FROM orderline " +
                     "INNER JOIN orders on orders.orderid=orderline.orderid " +
@@ -1011,60 +1071,39 @@ namespace RDA4
                     "where orders.orderid=" + orderid + ";";
 
                 check = GetDB(query, "instock", false);
-                if(check.ToLower().Contains("yes"))
+                if (check.ToLower().Contains("yes"))
                 {
                     MessageBox.Show("The order is already cancelled.");
                 }
                 else
                 {
+                    InsertOrders(vin, phone, 0, branchid, "CNCL", true);
                     MessageBox.Show("Order Cancelled..");
-                    //query = "SELECT vehicle.vin from orderline " +
-                    //    "INNER JOIN orders on orderline.orderid=orders.orderid " +
-                    //    "INNER JOIN vehicle on orderline.vin=vehicle.vin " +
-                    //    "where orders.orderid=" + orderid + ";";
-
-                    //check = GetDB(query, "vin", false);
-                    //string vin = check;
-                    //MessageBox.Show(vin);
-
-                    //string date = DateTime.Now.ToString("yyyy-MM-dd");
-                    
-
-                    //// get the latest id
-                    //query = "SELECT max(orderid) as maximum from orders";
-                    //int newid = ParseInt(GetDB(query, "maximum", false)) + 1;
-
-                    //// insert into order table
-                    //query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
-                    //    "VALUES " +
-                    //    "(" + newid + ", '" + date + "', 'CNCL');";
-
-                    //GetDB(query, "", true);
-
-                    //// update instock flag
-                    //query = "UPDATE vehicle SET instock='Yes' where vin='" + vin + "';";
-                    //GetDB(query, "", true);
-
                 }
-                
+            }
+
+            else
+            if (paid && valid)
+            {
+                query = "SELECT instock FROM vehicle " +
+                    "INNER JOIN orderline ON orderline.vin = vehicle.vin " +
+                    "where orderid=" + orderid + ";";
+                check = GetDB(query, "instock", false);
+
+                if(check.ToLower().Contains("no"))
+                {
+                    MessageBox.Show("Order is paid already.");
+                }
+                else
+                {
+                    InsertOrders(vin, phone, 0, branchid, "PAID", false);
+                    MessageBox.Show("Order Status changed from HOLD to PAID.");
+                }
+
             }
         }
 
-        /* 
-        *  Name:           ExitWally_Click()
-        *  Parameters:     object, EventArgs
-        *  Return value:   null
-        *  Description:    This method exits the closes the connection and exits program.
-        */
-        private void ExitWally_Click(object sender, EventArgs e)
-        {
-            DialogResult Confirmation = MessageBox.Show("Are you sure you want to exit?", "Confirm", MessageBoxButtons.YesNo);
-            if(Confirmation == DialogResult.Yes)
-            {
-                this.Close();
-                cn.Close();
-            }
-        }
+
 
         /* 
         *  Name:           SearchInventory_Click()
@@ -1079,8 +1118,8 @@ namespace RDA4
             int branchid = 0;
             string query = "";
             //string check = "";
-            
-            if(temp == "")
+
+            if (temp == "")
             {
                 selected = -1;
             }
@@ -1121,7 +1160,7 @@ namespace RDA4
                         count++;
                     }
 
-                   // MessageBox.Show(count.ToString());
+                    // MessageBox.Show(count.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -1140,7 +1179,128 @@ namespace RDA4
         {
             PanelInventory.BringToFront();
         }
-    } 
-    
-   
+
+
+        private void InsertOrders(string vin, string phone, int tradein, int branchid, string orderstatus, bool cncl)
+        {
+            string status = "";
+            string query = "";
+            string check = "";
+
+
+            // check whether customer has paid or put on 'Hold'
+            if (orderstatus.ToLower() == "hold")
+            {
+                status = "'HOLD'";
+            }
+            else
+            if (orderstatus.ToLower().Contains("cncl"))
+            {
+                status = "'CNCL'";
+            }
+            else
+            {
+                status = "'PAID'";
+            }
+
+            // get the price of the car and calculate sale price
+            query = "SELECT wprice FROM vehicle where vin='" + vin + "';";
+            check = GetDB(query, "wprice", false);
+            double sprice;
+            double.TryParse(check, out sprice);
+            double diff = sprice - tradein;
+
+            sprice = diff + (diff * 0.13);
+
+            DialogResult Confirmation = MessageBox.Show("Are you sure to proceed?", "Confirm", MessageBoxButtons.YesNo);
+
+            // Update instock flag
+            if (Confirmation == DialogResult.Yes)
+            {
+                string stock = "";
+
+                //  status = status.ToLower();
+                if (status.ToLower().Contains("paid"))
+                    stock = "'No'";
+                else
+                    if (status.ToLower().Contains("cncl"))
+                    stock = "'Yes'";
+                else
+                    stock = status.ToUpper();
+
+                query = "UPDATE Vehicle " +
+                    "SET instock=" + stock + " where vin='" + vin + "';";
+
+                GetDB(query, "", true);
+
+                // get the latest orderid
+                query = "SELECT max(orderid) AS maximum from orders;";
+                check = GetDB(query, "maximum", false);
+                int orderid = ParseInt(check);
+                if (orderid <= 5000)
+                {
+                    orderid = 5000;
+                }
+                orderid++;
+
+
+                string date = DateTime.Now.ToString("yyyy-MM-dd");
+                // insert order into Ordertable
+                query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
+                    "VALUES " +
+                    "(" + orderid.ToString() + ", '" + date + "', " + status + ");";
+                GetDB(query, "", true);
+
+                // get customer id for phonenumber from database
+                query = "SELECT customerid FROM customer where phone='" + phone + "';";
+                check = GetDB(query, "customerid", false);
+                int customerid = ParseInt(check);
+
+
+                // get latest orderlineid
+                int orderlineid = 0;
+                query = "SELECT max(orderlineid) AS maximum FROM orderline;";
+                check = GetDB(query, "maximum", false);
+                orderlineid = ParseInt(check);
+                if (orderlineid <= 200)
+                {
+                    orderlineid = 200;
+                }
+                orderlineid++;
+
+
+                // change sale price to 0 if order is cancelled
+                if (cncl)
+                    sprice = 0;
+
+                // insert into orderline
+                query = "INSERT INTO OrderLine (OrderLineID, OrderID, CustomerID, DealerID, VIN, TradeIn, sprice) " +
+                    "VALUES " +
+                    "(" + orderlineid.ToString() + ", " + orderid.ToString() + ", " + customerid.ToString() + ", "
+                    + branchid.ToString() + ", '" + vin + "', " + tradein.ToString() + ", " + sprice.ToString() + ")";
+
+                // execute orderline query
+                GetDB(query, "", true);
+
+            }
+        }
+
+        /* 
+        *  Name:           ExitWally_Click()
+        *  Parameters:     object, EventArgs
+        *  Return value:   null
+        *  Description:    This method exits the closes the connection and exits program.
+        */
+        private void ExitWally_Click(object sender, EventArgs e)
+        {
+            DialogResult Confirmation = MessageBox.Show("Are you sure you want to exit?", "Confirm", MessageBoxButtons.YesNo);
+            if (Confirmation == DialogResult.Yes)
+            {
+                this.Close();
+                cn.Close();
+            }
+        }
+    }
+
+
 }

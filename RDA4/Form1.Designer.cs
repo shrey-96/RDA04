@@ -111,10 +111,10 @@
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.SearchInventory = new System.Windows.Forms.Button();
             this.PanelSalesOrder = new System.Windows.Forms.Panel();
+            this.label20 = new System.Windows.Forms.Label();
             this.SalesOrderBox = new System.Windows.Forms.RichTextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
-            this.label20 = new System.Windows.Forms.Label();
             this.PanelHome.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.PanelAddVehicle.SuspendLayout();
@@ -160,7 +160,7 @@
             this.InventoryLevel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.InventoryLevel.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.InventoryLevel.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InventoryLevel.Location = new System.Drawing.Point(598, 388);
+            this.InventoryLevel.Location = new System.Drawing.Point(598, 408);
             this.InventoryLevel.Name = "InventoryLevel";
             this.InventoryLevel.Size = new System.Drawing.Size(243, 42);
             this.InventoryLevel.TabIndex = 7;
@@ -175,7 +175,7 @@
             this.ExitWally.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ExitWally.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.ExitWally.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExitWally.Location = new System.Drawing.Point(383, 480);
+            this.ExitWally.Location = new System.Drawing.Point(387, 493);
             this.ExitWally.Name = "ExitWally";
             this.ExitWally.Size = new System.Drawing.Size(243, 42);
             this.ExitWally.TabIndex = 6;
@@ -190,7 +190,7 @@
             this.OrderHistory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.OrderHistory.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.OrderHistory.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OrderHistory.Location = new System.Drawing.Point(189, 379);
+            this.OrderHistory.Location = new System.Drawing.Point(189, 399);
             this.OrderHistory.Name = "OrderHistory";
             this.OrderHistory.Size = new System.Drawing.Size(243, 42);
             this.OrderHistory.TabIndex = 5;
@@ -205,7 +205,7 @@
             this.ModifyOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ModifyOrder.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.ModifyOrder.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ModifyOrder.Location = new System.Drawing.Point(598, 277);
+            this.ModifyOrder.Location = new System.Drawing.Point(598, 294);
             this.ModifyOrder.Name = "ModifyOrder";
             this.ModifyOrder.Size = new System.Drawing.Size(243, 44);
             this.ModifyOrder.TabIndex = 4;
@@ -220,7 +220,7 @@
             this.PlaceOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.PlaceOrder.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.PlaceOrder.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PlaceOrder.Location = new System.Drawing.Point(189, 277);
+            this.PlaceOrder.Location = new System.Drawing.Point(189, 294);
             this.PlaceOrder.Name = "PlaceOrder";
             this.PlaceOrder.Size = new System.Drawing.Size(243, 44);
             this.PlaceOrder.TabIndex = 3;
@@ -1166,6 +1166,18 @@
             this.PanelSalesOrder.Size = new System.Drawing.Size(1063, 647);
             this.PanelSalesOrder.TabIndex = 28;
             // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label20.Font = new System.Drawing.Font("Arial Narrow", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label20.Location = new System.Drawing.Point(444, 113);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(144, 33);
+            this.label20.TabIndex = 28;
+            this.label20.Text = "Sales Order";
+            // 
             // SalesOrderBox
             // 
             this.SalesOrderBox.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1201,31 +1213,19 @@
             this.pictureBox8.TabIndex = 2;
             this.pictureBox8.TabStop = false;
             // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label20.Font = new System.Drawing.Font("Arial Narrow", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label20.Location = new System.Drawing.Point(444, 113);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(144, 33);
-            this.label20.TabIndex = 28;
-            this.label20.Text = "Sales Order";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 647);
+            this.Controls.Add(this.PanelHome);
+            this.Controls.Add(this.PanelAddVehicle);
+            this.Controls.Add(this.PanelSalesOrder);
             this.Controls.Add(this.PanelOrderHistory);
             this.Controls.Add(this.PanelModifyOrder);
             this.Controls.Add(this.PanelInventory);
             this.Controls.Add(this.PanelAddCustomer);
             this.Controls.Add(this.PanelPlaceOrder);
-            this.Controls.Add(this.PanelHome);
-            this.Controls.Add(this.PanelAddVehicle);
-            this.Controls.Add(this.PanelSalesOrder);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
