@@ -74,7 +74,6 @@
             this.label13 = new System.Windows.Forms.Label();
             this.vid = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.phoneid = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.FinalOrder = new System.Windows.Forms.Button();
@@ -115,6 +114,13 @@
             this.SalesOrderBox = new System.Windows.Forms.RichTextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.TestPanel = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
+            this.label24 = new System.Windows.Forms.Label();
+            this.testbox = new System.Windows.Forms.ComboBox();
+            this.pictureBox9 = new System.Windows.Forms.PictureBox();
+            this.testbutton = new System.Windows.Forms.Button();
+            this.phoneid = new System.Windows.Forms.ComboBox();
             this.PanelHome.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.PanelAddVehicle.SuspendLayout();
@@ -132,6 +138,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             this.PanelSalesOrder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
+            this.TestPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelHome
@@ -556,6 +564,7 @@
             this.PanelPlaceOrder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelPlaceOrder.BackgroundImage")));
             this.PanelPlaceOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.PanelPlaceOrder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelPlaceOrder.Controls.Add(this.phoneid);
             this.PanelPlaceOrder.Controls.Add(this.HomeOnPlaceOrder);
             this.PanelPlaceOrder.Controls.Add(this.dealerid);
             this.PanelPlaceOrder.Controls.Add(this.AddCustomerFromOrder);
@@ -568,7 +577,6 @@
             this.PanelPlaceOrder.Controls.Add(this.label13);
             this.PanelPlaceOrder.Controls.Add(this.vid);
             this.PanelPlaceOrder.Controls.Add(this.label14);
-            this.PanelPlaceOrder.Controls.Add(this.phoneid);
             this.PanelPlaceOrder.Controls.Add(this.label15);
             this.PanelPlaceOrder.Controls.Add(this.pictureBox4);
             this.PanelPlaceOrder.Controls.Add(this.FinalOrder);
@@ -603,7 +611,7 @@
             "Waterloo"});
             this.dealerid.Location = new System.Drawing.Point(410, 274);
             this.dealerid.Name = "dealerid";
-            this.dealerid.Size = new System.Drawing.Size(263, 24);
+            this.dealerid.Size = new System.Drawing.Size(359, 24);
             this.dealerid.TabIndex = 20;
             // 
             // AddCustomerFromOrder
@@ -641,7 +649,7 @@
             "HOLD"});
             this.orderstatusbox.Location = new System.Drawing.Point(410, 410);
             this.orderstatusbox.Name = "orderstatusbox";
-            this.orderstatusbox.Size = new System.Drawing.Size(263, 24);
+            this.orderstatusbox.Size = new System.Drawing.Size(359, 24);
             this.orderstatusbox.TabIndex = 13;
             // 
             // label17
@@ -660,7 +668,7 @@
             this.tradeinbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tradeinbox.Location = new System.Drawing.Point(407, 368);
             this.tradeinbox.Name = "tradeinbox";
-            this.tradeinbox.Size = new System.Drawing.Size(263, 24);
+            this.tradeinbox.Size = new System.Drawing.Size(362, 24);
             this.tradeinbox.TabIndex = 11;
             this.tradeinbox.Text = "0";
             // 
@@ -681,7 +689,7 @@
             this.orderdate.Location = new System.Drawing.Point(407, 323);
             this.orderdate.MaxDate = new System.DateTime(2018, 1, 1, 0, 0, 0, 0);
             this.orderdate.Name = "orderdate";
-            this.orderdate.Size = new System.Drawing.Size(263, 22);
+            this.orderdate.Size = new System.Drawing.Size(362, 22);
             this.orderdate.TabIndex = 9;
             this.orderdate.Value = new System.DateTime(2018, 1, 1, 0, 0, 0, 0);
             // 
@@ -701,7 +709,7 @@
             this.vid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.vid.Location = new System.Drawing.Point(410, 227);
             this.vid.Name = "vid";
-            this.vid.Size = new System.Drawing.Size(260, 24);
+            this.vid.Size = new System.Drawing.Size(359, 24);
             this.vid.TabIndex = 6;
             // 
             // label14
@@ -714,14 +722,6 @@
             this.label14.Size = new System.Drawing.Size(57, 24);
             this.label14.TabIndex = 5;
             this.label14.Text = "VIN :";
-            // 
-            // phoneid
-            // 
-            this.phoneid.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.phoneid.Location = new System.Drawing.Point(410, 177);
-            this.phoneid.Name = "phoneid";
-            this.phoneid.Size = new System.Drawing.Size(260, 24);
-            this.phoneid.TabIndex = 4;
             // 
             // label15
             // 
@@ -1213,19 +1213,110 @@
             this.pictureBox8.TabIndex = 2;
             this.pictureBox8.TabStop = false;
             // 
+            // TestPanel
+            // 
+            this.TestPanel.BackColor = System.Drawing.SystemColors.MenuText;
+            this.TestPanel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("TestPanel.BackgroundImage")));
+            this.TestPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.TestPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TestPanel.Controls.Add(this.testbutton);
+            this.TestPanel.Controls.Add(this.button5);
+            this.TestPanel.Controls.Add(this.label24);
+            this.TestPanel.Controls.Add(this.testbox);
+            this.TestPanel.Controls.Add(this.pictureBox9);
+            this.TestPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TestPanel.Location = new System.Drawing.Point(0, 0);
+            this.TestPanel.Name = "TestPanel";
+            this.TestPanel.Size = new System.Drawing.Size(1063, 647);
+            this.TestPanel.TabIndex = 26;
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.button5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button5.BackgroundImage")));
+            this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button5.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.button5.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.Location = new System.Drawing.Point(12, 504);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(156, 66);
+            this.button5.TabIndex = 25;
+            this.button5.Text = "Home";
+            this.button5.UseVisualStyleBackColor = false;
+            // 
+            // label24
+            // 
+            this.label24.BackColor = System.Drawing.SystemColors.MenuText;
+            this.label24.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label24.Location = new System.Drawing.Point(282, 233);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(92, 25);
+            this.label24.TabIndex = 22;
+            this.label24.Text = "In Stock :";
+            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // testbox
+            // 
+            this.testbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.testbox.FormattingEnabled = true;
+            this.testbox.Items.AddRange(new object[] {
+            "Yes",
+            "No"});
+            this.testbox.Location = new System.Drawing.Point(391, 231);
+            this.testbox.Name = "testbox";
+            this.testbox.Size = new System.Drawing.Size(404, 24);
+            this.testbox.TabIndex = 21;
+            // 
+            // pictureBox9
+            // 
+            this.pictureBox9.BackColor = System.Drawing.SystemColors.MenuText;
+            this.pictureBox9.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox9.Image")));
+            this.pictureBox9.Location = new System.Drawing.Point(128, 17);
+            this.pictureBox9.Name = "pictureBox9";
+            this.pictureBox9.Size = new System.Drawing.Size(734, 107);
+            this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox9.TabIndex = 2;
+            this.pictureBox9.TabStop = false;
+            // 
+            // testbutton
+            // 
+            this.testbutton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.testbutton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("testbutton.BackgroundImage")));
+            this.testbutton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.testbutton.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.testbutton.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.testbutton.Location = new System.Drawing.Point(498, 289);
+            this.testbutton.Name = "testbutton";
+            this.testbutton.Size = new System.Drawing.Size(136, 49);
+            this.testbutton.TabIndex = 26;
+            this.testbutton.Text = "Test";
+            this.testbutton.UseVisualStyleBackColor = false;
+            this.testbutton.Click += new System.EventHandler(this.testbutton_Click);
+            // 
+            // phoneid
+            // 
+            this.phoneid.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.phoneid.FormattingEnabled = true;
+            this.phoneid.Location = new System.Drawing.Point(410, 177);
+            this.phoneid.Name = "phoneid";
+            this.phoneid.Size = new System.Drawing.Size(359, 24);
+            this.phoneid.TabIndex = 28;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 647);
+            this.Controls.Add(this.PanelPlaceOrder);
             this.Controls.Add(this.PanelHome);
+            this.Controls.Add(this.TestPanel);
             this.Controls.Add(this.PanelAddVehicle);
             this.Controls.Add(this.PanelSalesOrder);
             this.Controls.Add(this.PanelOrderHistory);
             this.Controls.Add(this.PanelModifyOrder);
             this.Controls.Add(this.PanelInventory);
             this.Controls.Add(this.PanelAddCustomer);
-            this.Controls.Add(this.PanelPlaceOrder);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1251,6 +1342,8 @@
             this.PanelSalesOrder.ResumeLayout(false);
             this.PanelSalesOrder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
+            this.TestPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1305,7 +1398,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox vid;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox phoneid;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Button FinalOrder;
@@ -1342,6 +1434,13 @@
         private System.Windows.Forms.RichTextBox SalesOrderBox;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.PictureBox pictureBox8;
+        private System.Windows.Forms.Panel TestPanel;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.ComboBox testbox;
+        private System.Windows.Forms.PictureBox pictureBox9;
+        private System.Windows.Forms.Button testbutton;
+        private System.Windows.Forms.ComboBox phoneid;
     }
 }
 
