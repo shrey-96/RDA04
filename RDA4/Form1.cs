@@ -66,35 +66,15 @@ namespace RDA4
 
 
             PanelHome.BringToFront();
-            //TestPanel.BringToFront();
-            //------------------------------------------
 
-            testbox.Items.Clear();
-            string query = "SELECT concat(firstname, ' ', lastname, ',', phone) as 'details' from customer";
-            AddToCombo(testbox, query, "details");
-          
-
-
-
-            //-------------------------------------------
+            PreOrderPrompt.SelectedIndex = 0;
             orderdate.MaxDate = DateTime.Now.Date;
 
         }
 
-        private void testbutton_Click(object sender, EventArgs e)
-        {
-            string test = testbox.Text;
-
-            string[] check = test.Split(',');
-            string phone = check[1];
-
-            if(phone == "519-555-3333")
-                MessageBox.Show("--" + phone + "--");
-        }
-
 
         /*
-         Name: AddToCombo
+         Name:          AddToCombo
          Parameters:    combobox - the combo box that needs items to be listed
                         query - query to retrieve data from the database
                         column - name of column of data
@@ -304,9 +284,6 @@ namespace RDA4
                 branchid = BranchId(branch);
             }
 
-            // MessageBox.Show(branchid.ToString());
-
-
             // insert into vehicle once validated all the fields
             if (flag)
             {
@@ -315,7 +292,7 @@ namespace RDA4
                     "('" + vin + "', " + vyear.ToString() + ", '" + make + "', '" + model + "', '" + colour + "', " + kms.ToString() + ", " + wprice.ToString()
                      + ", '" + instock + "', " + branchid.ToString() + ");";
 
-                MessageBox.Show(query);
+               
                 GetDB(query, "", true);
 
                 //PanelHome.Visible = true;
@@ -476,10 +453,14 @@ namespace RDA4
        */
         private void PlaceOrder_Click(object sender, EventArgs e)
         {
-            PanelPlaceOrder.BringToFront();
+            // PanelPlaceOrder.BringToFront();
+            PanelSelectDealer.BringToFront();
+
             phoneid.Items.Clear();
             string query = "SELECT concat(firstname, ' ', lastname, ',', phone) as 'details' from customer";
             AddToCombo(phoneid, query, "details");
+
+            
         }
 
         /* 
@@ -524,25 +505,22 @@ namespace RDA4
 
             // get VIN and validate
             string vin = vid.Text;
-            tempflag = ValidateVIN(vin);
-            Error(vid, null, tempflag, "Please enter valid VIN (eg 12345678YEA -- 8 digits + 3 chars", 0);
-            if (!tempflag) flag = false;
+            string[] temp1 = vin.Split(',');
+            vin = temp1[1];
+          
+
+           // tempflag = ValidateVIN(vin);
+           // Error(vid, null, tempflag, "Please enter valid VIN (eg 12345678YEA -- 8 digits + 3 chars", 0);
+           // if (!tempflag) flag = false;
 
             // Get dealer and validate
-            int branchid = 0;
+            int branchid = ParseInt(HiddenDealer.Text);
             valid = 0;
             string dealer = dealerid.Text;
-            if (dealer == "")
-            {
-                valid = -1;
-                flag = false;
-            }
-            else
-            {
-                valid = 0;
-                branchid = BranchId(dealer);
-            }
-            Error(null, dealerid, tempflag, "Required Field", valid);
+          
+            
+
+           // int branchid = ParseInt(dealerid.Text);
 
             // get date
             string date = orderdate.Value.ToString("yyyy-MM-dd");
@@ -593,7 +571,7 @@ namespace RDA4
                         query = "SELECT make FROM vehicle where dealerid=" + branchid.ToString() +
                             " AND vin='" + vin + "';";
                         check = GetDB(query, "make", false);
-                        //MessageBox.Show("-----" + check + "-------");
+                     
                         if (check.ToLower() == "")
                             MessageBox.Show("Vehicles is not at this dealership.");
                         else
@@ -624,78 +602,69 @@ namespace RDA4
                 if (done)
                 {   // check whether customer has paid or put on 'Hold'
                     int orderid = InsertOrders(vin, phone, tradein, branchid, orderstatus, false);
-                    
-                    MessageBox.Show("Order Successfully placed!");
 
-                    if (tradein != 0)
+                    DialogResult Confirmation = MessageBox.Show("Are you sure to proceed?", "Confirm", MessageBoxButtons.YesNo);
+
+                    // Update instock flag
+                    if (Confirmation == DialogResult.Yes)
                     {
-                        //  MessageBox.Show("Please enter the details of tradein car.");
-                        //  pricebox.Text = tradein.ToString();
-                        //  PanelAddVehicle.BringToFront();
+                        MessageBox.Show("Order Successfully placed!");
+
+                        
+
+                        // get customer name
+                        query = "select concat(firstname, ' ', lastname) as 'Customer' from customer" +
+                            " where phone='" + phone + "';";
+                        check = GetDB(query, "Customer", false);
+                        string cus = check;
+
+                        query = "SELECT kms from vehicle where vin='" + vin + "';";
+                        check = GetDB(query, "kms", false);
+                        string kms = check;
+
+
+
+                        // salutation
+                        string x1 = "Thank you for choosing Wally's World of Wheels at " + dealer +
+                            " for quality used vehicle\n\n";
+
+                        // date, customer, orderid, orderstatus
+                        string date1 = "Date: " + date + "\n";
+                        string x2 = "Customer: " + cus + "\n";
+                        string x3 = "Order ID: " + orderid + " - " + orderstatus + "\n\n";
+
+                        // vehicle details
+                        query = "select concat(v_year, ' ', make, ' ', model, ', ', colour) as vehicles" +
+                            " from vehicle where vin='" + vin + "';";
+                        check = GetDB(query, "vehicles", false);
+
+                        // vehicle name
+                        string x4 = check + "\n";
+                        string x5 = "VIN: " + vin.ToUpper() + " " + "KMS: " + kms + "\n\n";
+
+                        // purchase price
+                        query = "select wprice from vehicle where vin='" + vin + "';";
+                        int wprice = ParseInt(GetDB(query, "wprice", false));
+                        string x6 = "Purchase Price: $" + wprice + "\n\n";
+
+                        // trade in
+                        string x7 = "Trade In: $" + tradein + "\n\n";
+
+                        // sub total
+                        int subtotal = wprice - tradein;
+                        string x8 = "Subtotal = $" + subtotal + "\n";
+
+                        // HST
+                        double HST = subtotal * 0.13;
+                        string x9 = "HST (13%) = $" + HST + "\n";
+                        string x10 = "Sale Total = $" + (subtotal + HST).ToString() + "\n";
+
+                        SalesOrderBox.Clear();
+                        SalesOrderBox.Text = x1 + date1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10;
+                        PanelSalesOrder.BringToFront();
                     }
-                    // ------------------------
-
-                    // get customer name
-                    query = "select concat(firstname, ' ', lastname) as 'Customer' from customer" +
-                        " where phone='" + phone + "';";
-                    check = GetDB(query, "Customer", false);
-                    string cus = check;
-
-                    query = "SELECT kms from vehicle where vin='" + vin + "';";
-                    check = GetDB(query, "kms", false);
-                    string kms = check;
-
-                    // --- Test phase
-                    string testingphase = "SELECT concat(vin, ' ', kms) FROM vehicle" +
-                        " WHERE customerid ="
-                        + " INNER JOIN orderline.customerid=customer.customerid ";
-
-
-
-                    // salutation
-                    string x1 = "Thank you for choosing Wally's World of Wheels at " + dealer +
-                        " for quality used vehicle\n\n";
-
-                    // date, customer, orderid, orderstatus
-                    string date1 = "Date: " + date + "\n";
-                    string x2 = "Customer: " + cus + "\n";
-                    string x3 = "Order ID: " + orderid + " - " + orderstatus + "\n\n";
-
-                    // vehicle details
-                    query = "select concat(v_year, ' ', make, ' ', model, ', ', colour) as vehicles" +
-                        " from vehicle where vin='" + vin + "';";
-                    check = GetDB(query, "vehicles", false);
-
-                    // vehicle name
-                    string x4 = check + "\n";
-                    string x5 = "VIN: " + vin.ToUpper() + " " + "KMS: " + kms + "\n\n";
-
-                    // purchase price
-                    query = "select wprice from vehicle where vin='" + vin + "';";
-                    int wprice = ParseInt(GetDB(query, "wprice", false));
-                    string x6 = "Purchase Price: $" + wprice + "\n\n";
-
-                    // trade in
-                    string x7 = "Trade In: $" + tradein + "\n\n";
-
-                    // sub total
-                    int subtotal = wprice - tradein;
-                    string x8 = "Subtotal = $" + subtotal + "\n";
-
-                    // HST
-                    double HST = subtotal * 0.13;
-                    string x9 = "HST (13%) = $" + HST + "\n";
-                    string x10 = "Sale Total = $" + (subtotal + HST).ToString() + "\n";
-
-                    SalesOrderBox.Clear();
-                    SalesOrderBox.Text = x1 + date1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10;
-                    PanelSalesOrder.BringToFront();
-
-
-
-
                     //-----------------------
-                    PanelPlaceOrder.SendToBack();
+                    //PanelPlaceOrder.SendToBack();
                 }
 
             }
@@ -826,15 +795,22 @@ namespace RDA4
 
             // clear all textboxes of place order
             phoneid.Items.Clear();
-            vid.Clear();
+           // vid.Clear();
             tradeinbox.Text = "0";
 
             // clear inventory listbox
             InvList.Items.Clear();
 
             // clear modify order textboxes
-            Orderidbox.Clear();
+           // Orderidbox.Clear();
             RetrievedDetails.Clear();
+
+
+            // set default value for combo box
+            orderstatusbox.SelectedIndex = 0;
+
+            // clear hidden textbox value
+            //HiddenDealer.Clear();
 
             OrderDetails.Clear();
 
@@ -901,7 +877,11 @@ namespace RDA4
         */
         private void ModifyOrder_Click(object sender, EventArgs e)
         {
+            string query = "SELECT orderid from orders;";
+            AddToCombo(Orderidbox, query, "orderid");
+
             PanelModifyOrder.BringToFront();
+
         }
 
         /* 
@@ -919,13 +899,13 @@ namespace RDA4
             bool exist = true;
 
             int orderid = ParseInt(temp);
-
+           
 
 
             if (orderid < 1000 || orderid > 9999)
                 validformat = false;
 
-            Error(Orderidbox, null, validformat, "Please enter valid 4 digit id.", 0);
+          //  Error(Orderidbox, null, validformat, "Please enter valid 4 digit id.", 0);
 
             if (validformat)
             {
@@ -954,7 +934,7 @@ namespace RDA4
                 {
                     exist = false;
                 }
-                Error(Orderidbox, null, exist, "The Order id does not exist in database", 0);
+               // Error(Orderidbox, null, exist, "The Order id does not exist in database", 0);
             }
 
 
@@ -986,7 +966,6 @@ namespace RDA4
 
 
             temp = temp.Substring(0, 5);
-           // MessageBox.Show("--" + temp + "--");
 
             // status is not already paid
             if (temp.ToLower() != " paid" && !temp.ToLower().Contains("cncl"))
@@ -1008,8 +987,7 @@ namespace RDA4
                 }
                 else
                     if (status.ToLower() == "paid")
-                {
-                    MessageBox.Show("PAIDDDDDDDDD");
+                {                    
                     paid = true;
                 }
 
@@ -1046,7 +1024,7 @@ namespace RDA4
             check = GetDB(query, "vin", false);
             vin = check;
             vin = vin.Substring(1);
-            // MessageBox.Show("--" + vin + "--");
+
 
             // get phone number of customer
             query = "SELECT phone FROM orderline " +
@@ -1054,13 +1032,12 @@ namespace RDA4
                 "where orderid=" + orderid + ";";
             phone = GetDB(query, "phone", false);
             phone = phone.Substring(1);
-            //MessageBox.Show("--" + phone + "--");
+
 
             // get branch id
             query = "SELECT dealerid FROM orderline " +
                  "where orderid=" + orderid + ";";
             branchid = ParseInt(GetDB(query, "dealerid", false));
-            //  MessageBox.Show("--" + branchid.ToString() + "--");
 
 
 
@@ -1140,8 +1117,6 @@ namespace RDA4
                     " from vehicle where dealerid=" + branchid + ";";
                 // check = GetDB(query, "Details", false);
 
-                //  MessageBox.Show(check);
-
                 cmd.CommandText = query;
                 MySqlDataReader reader;
                 reader = cmd.ExecuteReader();
@@ -1182,6 +1157,7 @@ namespace RDA4
         */
         private void InventoryLevel_Click(object sender, EventArgs e)
         {
+            DealershipSelect.SelectedIndex = 0;
             PanelInventory.BringToFront();
         }
 
@@ -1218,80 +1194,76 @@ namespace RDA4
 
             sprice = diff + (diff * 0.13);
 
-            DialogResult Confirmation = MessageBox.Show("Are you sure to proceed?", "Confirm", MessageBoxButtons.YesNo);
 
-            // Update instock flag
-            if (Confirmation == DialogResult.Yes)
+            string stock = "";
+
+            //  status = status.ToLower();
+            if (status.ToLower().Contains("paid"))
+                stock = "'No'";
+            else
+                if (status.ToLower().Contains("cncl"))
+                stock = "'Yes'";
+            else
+                stock = status.ToUpper();
+
+            query = "UPDATE Vehicle " +
+                "SET instock=" + stock + " where vin='" + vin + "';";
+
+            GetDB(query, "", true);
+
+            // get the latest orderid
+            query = "SELECT max(orderid) AS maximum from orders;";
+            check = GetDB(query, "maximum", false);
+            int orderid = ParseInt(check);
+            if (orderid <= 5000)
             {
-                string stock = "";
-
-                //  status = status.ToLower();
-                if (status.ToLower().Contains("paid"))
-                    stock = "'No'";
-                else
-                    if (status.ToLower().Contains("cncl"))
-                    stock = "'Yes'";
-                else
-                    stock = status.ToUpper();
-
-                query = "UPDATE Vehicle " +
-                    "SET instock=" + stock + " where vin='" + vin + "';";
-
-                GetDB(query, "", true);
-
-                // get the latest orderid
-                query = "SELECT max(orderid) AS maximum from orders;";
-                check = GetDB(query, "maximum", false);
-                int orderid = ParseInt(check);
-                if (orderid <= 5000)
-                {
-                    orderid = 5000;
-                }
-                orderid++;
-
-
-                string date = DateTime.Now.ToString("yyyy-MM-dd");
-                // insert order into Ordertable
-                query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
-                    "VALUES " +
-                    "(" + orderid.ToString() + ", '" + date + "', " + status + ");";
-                GetDB(query, "", true);
-
-                // get customer id for phonenumber from database
-                query = "SELECT customerid FROM customer where phone='" + phone + "';";
-                check = GetDB(query, "customerid", false);
-                int customerid = ParseInt(check);
-
-
-                // get latest orderlineid
-                int orderlineid = 0;
-                query = "SELECT max(orderlineid) AS maximum FROM orderline;";
-                check = GetDB(query, "maximum", false);
-                orderlineid = ParseInt(check);
-                if (orderlineid <= 200)
-                {
-                    orderlineid = 200;
-                }
-                orderlineid++;
-
-
-                // change sale price to 0 if order is cancelled
-                if (cncl)
-                    sprice = 0;
-
-                // insert into orderline
-                query = "INSERT INTO OrderLine (OrderLineID, OrderID, CustomerID, DealerID, VIN, TradeIn, sprice) " +
-                    "VALUES " +
-                    "(" + orderlineid.ToString() + ", " + orderid.ToString() + ", " + customerid.ToString() + ", "
-                    + branchid.ToString() + ", '" + vin + "', " + tradein.ToString() + ", " + sprice.ToString() + ")";
-
-                // execute orderline query
-                GetDB(query, "", true);
-                value = orderid;
-               
+                orderid = 5000;
             }
+            orderid++;
+
+
+            string date = DateTime.Now.ToString("yyyy-MM-dd");
+            // insert order into Ordertable
+            query = "INSERT INTO Orders (OrderID, OrderDate, OrderStatus) " +
+                "VALUES " +
+                "(" + orderid.ToString() + ", '" + date + "', " + status + ");";
+            GetDB(query, "", true);
+
+            // get customer id for phonenumber from database
+            query = "SELECT customerid FROM customer where phone='" + phone + "';";
+            check = GetDB(query, "customerid", false);
+            int customerid = ParseInt(check);
+
+
+            // get latest orderlineid
+            int orderlineid = 0;
+            query = "SELECT max(orderlineid) AS maximum FROM orderline;";
+            check = GetDB(query, "maximum", false);
+            orderlineid = ParseInt(check);
+            if (orderlineid <= 200)
+            {
+                orderlineid = 200;
+            }
+            orderlineid++;
+
+
+            // change sale price to 0 if order is cancelled
+            if (cncl)
+                sprice = 0;
+
+            // insert into orderline
+            query = "INSERT INTO OrderLine (OrderLineID, OrderID, CustomerID, DealerID, VIN, TradeIn, sprice) " +
+                "VALUES " +
+                "(" + orderlineid.ToString() + ", " + orderid.ToString() + ", " + customerid.ToString() + ", "
+                + branchid.ToString() + ", '" + vin + "', " + tradein.ToString() + ", " + sprice.ToString() + ")";
+
+            // execute orderline query
+            GetDB(query, "", true);
+            value = orderid;
+
+
             return value;
-            
+
         }
 
         /* 
@@ -1310,7 +1282,20 @@ namespace RDA4
             }
         }
 
-        
+        private void SelectDealer_Click(object sender, EventArgs e)
+        {
+            string temp = PreOrderPrompt.Text;
+            dealerid.Text = temp;
+            int branchid = BranchId(temp);
+            HiddenDealer.Text = branchid.ToString();
+
+            string query = "SELECT CONCAT(instock, ' --', make, ' ', model, ',', vin) AS details from vehicle " +
+                "where dealerid=" + branchid + ";";
+            AddToCombo(vid, query, "details");
+
+            PanelPlaceOrder.BringToFront();
+            //MessageBox.Show("--" + branchid + "--");                
+        }
     }
 
 
