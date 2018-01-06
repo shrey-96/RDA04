@@ -92,6 +92,16 @@ namespace RDA4
                 MessageBox.Show("--" + phone + "--");
         }
 
+
+        /*
+         Name: AddToCombo
+         Parameters:    combobox - the combo box that needs items to be listed
+                        query - query to retrieve data from the database
+                        column - name of column of data
+         Return:        void
+         Description:   This method takes the item from the database and add it to the 
+                        drop down list.
+        */
         private void AddToCombo(ComboBox combo, string query, string column)
         {
             cmd.CommandText = query;
@@ -639,6 +649,8 @@ namespace RDA4
                     string testingphase = "SELECT concat(vin, ' ', kms) FROM vehicle" +
                         " WHERE customerid ="
                         + " INNER JOIN orderline.customerid=customer.customerid ";
+
+
 
                     // salutation
                     string x1 = "Thank you for choosing Wally's World of Wheels at " + dealer +
