@@ -635,6 +635,11 @@ namespace RDA4
                     check = GetDB(query, "kms", false);
                     string kms = check;
 
+                    // --- Test phase
+                    string testingphase = "SELECT concat(vin, ' ', kms) FROM vehicle" +
+                        " WHERE customerid ="
+                        + " INNER JOIN orderline.customerid=customer.customerid ";
+
                     // salutation
                     string x1 = "Thank you for choosing Wally's World of Wheels at " + dealer +
                         " for quality used vehicle\n\n";
