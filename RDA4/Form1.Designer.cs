@@ -62,6 +62,9 @@
             this.vinbox = new System.Windows.Forms.TextBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.PanelPlaceOrder = new System.Windows.Forms.Panel();
+            this.vid = new System.Windows.Forms.ComboBox();
+            this.HiddenDealer = new System.Windows.Forms.TextBox();
+            this.dealerid = new System.Windows.Forms.TextBox();
             this.phoneid = new System.Windows.Forms.ComboBox();
             this.HomeOnPlaceOrder = new System.Windows.Forms.Button();
             this.AddCustomerFromOrder = new System.Windows.Forms.Button();
@@ -92,6 +95,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.PanelModifyOrder = new System.Windows.Forms.Panel();
+            this.Orderidbox = new System.Windows.Forms.ComboBox();
             this.ModifyStatus = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
             this.SearchCustomer = new System.Windows.Forms.Button();
@@ -118,10 +122,14 @@
             this.label29 = new System.Windows.Forms.Label();
             this.pictureBox10 = new System.Windows.Forms.PictureBox();
             this.SelectDealer = new System.Windows.Forms.Button();
-            this.dealerid = new System.Windows.Forms.TextBox();
-            this.HiddenDealer = new System.Windows.Forms.TextBox();
-            this.vid = new System.Windows.Forms.ComboBox();
-            this.Orderidbox = new System.Windows.Forms.ComboBox();
+            this.WarrantyDropBox = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.PanelReport = new System.Windows.Forms.Panel();
+            this.label22 = new System.Windows.Forms.Label();
+            this.SalesReport = new System.Windows.Forms.RichTextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.pictureBox9 = new System.Windows.Forms.PictureBox();
+            this.ViewSalesReport = new System.Windows.Forms.Button();
             this.PanelHome.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.PanelAddVehicle.SuspendLayout();
@@ -141,6 +149,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             this.PanelSelectDealer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
+            this.PanelReport.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelHome
@@ -148,6 +158,7 @@
             this.PanelHome.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelHome.BackgroundImage")));
             this.PanelHome.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.PanelHome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelHome.Controls.Add(this.ViewSalesReport);
             this.PanelHome.Controls.Add(this.InventoryLevel);
             this.PanelHome.Controls.Add(this.ExitWally);
             this.PanelHome.Controls.Add(this.OrderHistory);
@@ -184,7 +195,7 @@
             this.ExitWally.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ExitWally.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.ExitWally.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExitWally.Location = new System.Drawing.Point(387, 493);
+            this.ExitWally.Location = new System.Drawing.Point(598, 518);
             this.ExitWally.Name = "ExitWally";
             this.ExitWally.Size = new System.Drawing.Size(243, 42);
             this.ExitWally.TabIndex = 6;
@@ -575,6 +586,8 @@
             this.PanelPlaceOrder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelPlaceOrder.BackgroundImage")));
             this.PanelPlaceOrder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.PanelPlaceOrder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelPlaceOrder.Controls.Add(this.label13);
+            this.PanelPlaceOrder.Controls.Add(this.WarrantyDropBox);
             this.PanelPlaceOrder.Controls.Add(this.vid);
             this.PanelPlaceOrder.Controls.Add(this.HiddenDealer);
             this.PanelPlaceOrder.Controls.Add(this.dealerid);
@@ -597,6 +610,31 @@
             this.PanelPlaceOrder.Name = "PanelPlaceOrder";
             this.PanelPlaceOrder.Size = new System.Drawing.Size(1063, 647);
             this.PanelPlaceOrder.TabIndex = 9;
+            // 
+            // vid
+            // 
+            this.vid.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.vid.FormattingEnabled = true;
+            this.vid.Location = new System.Drawing.Point(407, 227);
+            this.vid.Name = "vid";
+            this.vid.Size = new System.Drawing.Size(359, 24);
+            this.vid.TabIndex = 31;
+            // 
+            // HiddenDealer
+            // 
+            this.HiddenDealer.Location = new System.Drawing.Point(911, 183);
+            this.HiddenDealer.Name = "HiddenDealer";
+            this.HiddenDealer.Size = new System.Drawing.Size(100, 22);
+            this.HiddenDealer.TabIndex = 30;
+            this.HiddenDealer.Visible = false;
+            // 
+            // dealerid
+            // 
+            this.dealerid.Location = new System.Drawing.Point(407, 277);
+            this.dealerid.Name = "dealerid";
+            this.dealerid.ReadOnly = true;
+            this.dealerid.Size = new System.Drawing.Size(362, 22);
+            this.dealerid.TabIndex = 29;
             // 
             // phoneid
             // 
@@ -953,6 +991,15 @@
             this.PanelModifyOrder.Size = new System.Drawing.Size(1063, 647);
             this.PanelModifyOrder.TabIndex = 27;
             // 
+            // Orderidbox
+            // 
+            this.Orderidbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Orderidbox.FormattingEnabled = true;
+            this.Orderidbox.Location = new System.Drawing.Point(360, 159);
+            this.Orderidbox.Name = "Orderidbox";
+            this.Orderidbox.Size = new System.Drawing.Size(260, 24);
+            this.Orderidbox.TabIndex = 31;
+            // 
             // ModifyStatus
             // 
             this.ModifyStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1178,7 +1225,7 @@
             this.SalesOrderBox.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SalesOrderBox.Location = new System.Drawing.Point(250, 149);
             this.SalesOrderBox.Name = "SalesOrderBox";
-            this.SalesOrderBox.Size = new System.Drawing.Size(519, 458);
+            this.SalesOrderBox.Size = new System.Drawing.Size(519, 485);
             this.SalesOrderBox.TabIndex = 27;
             this.SalesOrderBox.Text = "";
             // 
@@ -1289,46 +1336,113 @@
             this.SelectDealer.UseVisualStyleBackColor = false;
             this.SelectDealer.Click += new System.EventHandler(this.SelectDealer_Click);
             // 
-            // dealerid
+            // WarrantyDropBox
             // 
-            this.dealerid.Location = new System.Drawing.Point(407, 277);
-            this.dealerid.Name = "dealerid";
-            this.dealerid.ReadOnly = true;
-            this.dealerid.Size = new System.Drawing.Size(362, 22);
-            this.dealerid.TabIndex = 29;
+            this.WarrantyDropBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.WarrantyDropBox.FormattingEnabled = true;
+            this.WarrantyDropBox.Items.AddRange(new object[] {
+            "No Warranty",
+            "One Year",
+            "Two Year"});
+            this.WarrantyDropBox.Location = new System.Drawing.Point(406, 458);
+            this.WarrantyDropBox.Name = "WarrantyDropBox";
+            this.WarrantyDropBox.Size = new System.Drawing.Size(359, 24);
+            this.WarrantyDropBox.TabIndex = 32;
             // 
-            // HiddenDealer
+            // label13
             // 
-            this.HiddenDealer.Location = new System.Drawing.Point(911, 183);
-            this.HiddenDealer.Name = "HiddenDealer";
-            this.HiddenDealer.Size = new System.Drawing.Size(100, 22);
-            this.HiddenDealer.TabIndex = 30;
-            this.HiddenDealer.Visible = false;
+            this.label13.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label13.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label13.Location = new System.Drawing.Point(297, 456);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(103, 24);
+            this.label13.TabIndex = 33;
+            this.label13.Text = "Warranty :";
             // 
-            // vid
+            // PanelReport
             // 
-            this.vid.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.vid.FormattingEnabled = true;
-            this.vid.Location = new System.Drawing.Point(407, 227);
-            this.vid.Name = "vid";
-            this.vid.Size = new System.Drawing.Size(359, 24);
-            this.vid.TabIndex = 31;
+            this.PanelReport.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PanelReport.BackgroundImage")));
+            this.PanelReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PanelReport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelReport.Controls.Add(this.label22);
+            this.PanelReport.Controls.Add(this.SalesReport);
+            this.PanelReport.Controls.Add(this.button5);
+            this.PanelReport.Controls.Add(this.pictureBox9);
+            this.PanelReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelReport.Location = new System.Drawing.Point(0, 0);
+            this.PanelReport.Name = "PanelReport";
+            this.PanelReport.Size = new System.Drawing.Size(1063, 647);
+            this.PanelReport.TabIndex = 29;
             // 
-            // Orderidbox
+            // label22
             // 
-            this.Orderidbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Orderidbox.FormattingEnabled = true;
-            this.Orderidbox.Location = new System.Drawing.Point(360, 159);
-            this.Orderidbox.Name = "Orderidbox";
-            this.Orderidbox.Size = new System.Drawing.Size(260, 24);
-            this.Orderidbox.TabIndex = 31;
+            this.label22.AutoSize = true;
+            this.label22.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label22.Font = new System.Drawing.Font("Arial Narrow", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label22.Location = new System.Drawing.Point(485, 114);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(156, 33);
+            this.label22.TabIndex = 28;
+            this.label22.Text = "Sales Report";
+            // 
+            // SalesReport
+            // 
+            this.SalesReport.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SalesReport.Location = new System.Drawing.Point(250, 149);
+            this.SalesReport.Name = "SalesReport";
+            this.SalesReport.Size = new System.Drawing.Size(623, 485);
+            this.SalesReport.TabIndex = 27;
+            this.SalesReport.Text = "";
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.button5.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button5.BackgroundImage")));
+            this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button5.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.button5.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.Location = new System.Drawing.Point(12, 514);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(156, 66);
+            this.button5.TabIndex = 26;
+            this.button5.Text = "Home";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.HomeButton);
+            // 
+            // pictureBox9
+            // 
+            this.pictureBox9.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.pictureBox9.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox9.Image")));
+            this.pictureBox9.Location = new System.Drawing.Point(124, 3);
+            this.pictureBox9.Name = "pictureBox9";
+            this.pictureBox9.Size = new System.Drawing.Size(734, 107);
+            this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox9.TabIndex = 2;
+            this.pictureBox9.TabStop = false;
+            // 
+            // ViewSalesReport
+            // 
+            this.ViewSalesReport.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.ViewSalesReport.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("ViewSalesReport.BackgroundImage")));
+            this.ViewSalesReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ViewSalesReport.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.ViewSalesReport.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ViewSalesReport.Location = new System.Drawing.Point(189, 518);
+            this.ViewSalesReport.Name = "ViewSalesReport";
+            this.ViewSalesReport.Size = new System.Drawing.Size(243, 42);
+            this.ViewSalesReport.TabIndex = 8;
+            this.ViewSalesReport.Text = "Sales Report";
+            this.ViewSalesReport.UseVisualStyleBackColor = false;
+            this.ViewSalesReport.Click += new System.EventHandler(this.ViewSalesReport_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1063, 647);
-            this.Controls.Add(this.PanelAddVehicle);
+            this.Controls.Add(this.PanelReport);
             this.Controls.Add(this.PanelSalesOrder);
             this.Controls.Add(this.PanelOrderHistory);
             this.Controls.Add(this.PanelModifyOrder);
@@ -1337,6 +1451,7 @@
             this.Controls.Add(this.PanelSelectDealer);
             this.Controls.Add(this.PanelPlaceOrder);
             this.Controls.Add(this.PanelHome);
+            this.Controls.Add(this.PanelAddVehicle);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1363,6 +1478,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             this.PanelSelectDealer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
+            this.PanelReport.ResumeLayout(false);
+            this.PanelReport.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1461,6 +1579,14 @@
         private System.Windows.Forms.TextBox HiddenDealer;
         private System.Windows.Forms.ComboBox vid;
         private System.Windows.Forms.ComboBox Orderidbox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox WarrantyDropBox;
+        private System.Windows.Forms.Panel PanelReport;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.RichTextBox SalesReport;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.PictureBox pictureBox9;
+        private System.Windows.Forms.Button ViewSalesReport;
     }
 }
 

@@ -480,6 +480,27 @@ namespace RDA4
             bool exist = false;
             string query = "";
             string check = "";
+            double warrantyprice = 0;
+
+            // get the warranty
+            string warranty = WarrantyDropBox.Text.ToLower();
+            if (warranty.Contains("no"))
+            {
+                warrantyprice = 0;
+            }
+            else
+                if (warranty.Contains("one"))
+            {
+                warrantyprice = 0.06;
+            }
+            else
+                if (warranty.Contains("two"))
+            {
+                warrantyprice = 0.1;               
+            }
+
+
+
 
 
             // phone
@@ -505,8 +526,11 @@ namespace RDA4
 
             // get VIN and validate
             string vin = vid.Text;
-            string[] temp1 = vin.Split(',');
-            vin = temp1[1];
+            if (vin != "")
+            {
+                string[] temp1 = vin.Split(',');
+                vin = temp1[1];
+            }
           
 
            // tempflag = ValidateVIN(vin);
@@ -650,17 +674,21 @@ namespace RDA4
                         // trade in
                         string x7 = "Trade In: $" + tradein + "\n\n";
 
-                        // sub total
-                        int subtotal = wprice - tradein;
-                        string x8 = "Subtotal = $" + subtotal + "\n";
+                        string warrantytime = "Warranty Period: " + WarrantyDropBox.Text + "\n";                        
+                        double warrantysale = wprice * warrantyprice;
+                        string warrantyreceipt = "Warranty Price: " + warrantysale + "\n";
 
+                        // sub total
+                        double subtotal = wprice - tradein + warrantysale;
+                        string x8 = "Subtotal = $" + subtotal + "\n";                  
+                        
                         // HST
                         double HST = subtotal * 0.13;
                         string x9 = "HST (13%) = $" + HST + "\n";
                         string x10 = "Sale Total = $" + (subtotal + HST).ToString() + "\n";
 
                         SalesOrderBox.Clear();
-                        SalesOrderBox.Text = x1 + date1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10;
+                        SalesOrderBox.Text = x1 + date1 + x2 + x3 + x4 + x5 + x6 + warrantytime + warrantyreceipt + x7 + x8 + x9 + x10;
                         PanelSalesOrder.BringToFront();
                     }
                     //-----------------------
@@ -1291,10 +1319,71 @@ namespace RDA4
 
             string query = "SELECT CONCAT(instock, ' --', make, ' ', model, ',', vin) AS details from vehicle " +
                 "where dealerid=" + branchid + ";";
+            vid.Items.Clear();
             AddToCombo(vid, query, "details");
 
+            WarrantyDropBox.SelectedIndex = 0;
             PanelPlaceOrder.BringToFront();
+            
             //MessageBox.Show("--" + branchid + "--");                
+        }
+
+        private void ViewSalesReport_Click(object sender, EventArgs e)
+        {
+            SalesReport.Clear();
+            string query = "";
+            string check = "";
+            string[] total = new string[3];
+            string[] dealername = { "Sportsworld: \t", "Guelph Automall: ", "Waterloo: \t" }; 
+
+
+            int j = 0;
+            for (int i = 1001; i <= 1003; i++)
+            {
+                query = "SELECT sum(sprice) as 'Details' from orderline " +
+                    "inner join orders on orders.orderid=orderline.orderid " +
+                    "where orderstatus='Paid' AND dealerid =" + i + ";";
+
+                total[j] = "$" + GetDB(query, "Details", false);
+                j++;            
+            }
+
+            string final = "";
+            for(int k = 0; k < 3; k++)
+            {
+                final = final + dealername[k] + "\t" + total[k] + "\n";
+            }
+
+            final = final + "\n\n";
+
+            query = "SELECT concat('$', wprice, '--  ', vin, ' ', v_year, ' ', make, ' ', model, ' ', kms) as 'details' " +
+                "from vehicle; ";
+
+            cmd.CommandText = query;
+            MySqlDataReader reader;
+
+            // execute the query
+            reader = cmd.ExecuteReader();
+
+            // read from reader
+            while (reader.Read())
+            {
+                final = final + reader["details"] + "\n";
+            }
+
+            // close reader
+            reader.Close();
+
+            SalesReport.Text = final;
+
+
+
+            // bring report panel to the front
+            PanelReport.BringToFront();
+
+
+
+
         }
     }
 
